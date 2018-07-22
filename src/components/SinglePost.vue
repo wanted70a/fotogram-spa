@@ -8,7 +8,7 @@
         <p class='c-post__avatar__name'>{{post.data.username}}</p>
       </div>
     </div>
-    <div class="c-post__media">
+    <div class="c-post__media" @click='showPostModal'>
       <div class="c-post__media__img" v-if='post.data.type_id === 1'>
           <img :src='IMG + ( post.data.media.medium ?post.data.media.medium  :post.data.media.placeholder )' alt="">
       </div>
@@ -56,6 +56,12 @@ export default {
      post:{
        type:Object,
        required:true
+     }
+   },
+   methods:{
+     showPostModal(){
+       console.log(`show post ${this.post.data.id}` );
+       this.$emit('showPostModal', this.post.data.id );
      }
    }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="p-home l">
-    <app-post-modal v-if='postModal' :id='modalId'/>
+    <app-post-modal v-if='postModal' :id='modalId' @closePostModal='closePostModal($event)'/>
     <div class="b-feed">
       <app-single-post v-for='(p, i) in feed' :key='i' :post='{data:p, i:i}'  v-on:showPostModal='toggleModal($event)'/>
     </div>
@@ -36,8 +36,12 @@ export default {
     toggleModal( data ){
       this.postModal = true;
       this.modalId = data;
-      document.body.style.overflow = "hidden";
+      document.body.style.overflowY = "hidden";
       console.log( data );
+    },
+    closePostModal(){
+      this.postModal = false;
+      document.body.style.overflowY = "visible";
     }
   }
 }

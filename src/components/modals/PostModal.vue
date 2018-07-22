@@ -1,6 +1,7 @@
 <template lang="html">
   <div class="b-post-modal">
     MODAL is {{id}}
+    <button type="button" @click='closePostModal'>CLOSE</button>
   </div>
 </template>
 
@@ -17,6 +18,11 @@ export default {
         required:true
       }
   },
+  methods:{
+    closePostModal(){
+      this.$emit('closePostModal')
+    }
+  }
 
 }
 </script>

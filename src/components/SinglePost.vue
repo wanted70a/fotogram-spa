@@ -60,14 +60,14 @@ export default {
    },
    methods:{
      showPostModal(){
-       console.log(`show post ${this.post.data.id}` );
-       this.$emit('showPostModal', this.post.data.id );
+       console.log(`emit shiwPostModal ${this.post.data.id}` );
+       this.$emit('showPostModal', { id:this.post.data.id, index:this.post.i } );
      }
    }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/scss/master-scss.scss";
 .c-post{
   display: flex;

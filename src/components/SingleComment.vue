@@ -26,7 +26,7 @@ export default {
     },
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/scss/master-scss.scss";
 
 .c-comment{
@@ -49,6 +49,7 @@ export default {
       vertical-align: top;
       padding-top: 1rem;
       width: 80%;
+      text-align: left;
     }
   }
 }

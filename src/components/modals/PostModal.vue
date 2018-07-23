@@ -1,12 +1,8 @@
 <template lang="html">
-     <transition name="slideDown">
-         <div class="b-post-modal">
-           MODAL is {{id}}
-           <button type="button" @click='closePostModal'>CLOSE</button>
-           <app-single-post :post='currentPost'/>
-         </div>
-     </transition>
-
+   <div class="b-post-modal">
+     <button type="button" @click='closePostModal'>CLOSE</button>
+     <app-single-post :post='{ data:post, i:index }' v-if='show'/>
+   </div>
 </template>
 
 <script>
@@ -15,16 +11,17 @@ import AppSinglePost from '@/components/SinglePost.vue'
 export default {
   data(){
     return{
-        currentPost:{
-            data:{}
-        }
+        post:{},
+        show:false,
     }
   },
   props:{
     id:{
-        type:Number,
         required:true
-      }
+      },
+    index:{
+      required:true
+    }
   },
   methods:{
     closePostModal(){
@@ -35,7 +32,8 @@ export default {
       posts.getById(this.id)
       .then( res => {
         console.log(res.data.data);
-        this.currentPost.data = res.data.data;
+        this.post = res.data.data;
+        this.show = true;
       })
   },
   components:{

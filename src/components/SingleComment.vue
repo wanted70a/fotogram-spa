@@ -53,4 +53,10 @@ export default {
     }
   }
 }
+
+.b-post-modal{
+    .c-comment__content__text{
+        color: white;
+    }
+}
 </style>

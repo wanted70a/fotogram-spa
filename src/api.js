@@ -79,7 +79,6 @@ export const login = {
 }
 
 export const posts = {
-
   getList( page, amount ){
     let config = {};
     config.headers = api.authHeader();
@@ -91,5 +90,13 @@ export const posts = {
       config.headers = api.authHeader();
       return api.get( `${POSTS}/${id}` , config)
   }
+}
 
+export const comments = {
+    getByPostId( postId, page, amount ){
+        let config = {};
+        config.headers = api.authHeader();
+        config.params = { page, amount }
+        return api.get( COMMENTS, config )
+    }
 }

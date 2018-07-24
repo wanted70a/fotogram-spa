@@ -1,14 +1,14 @@
 <template lang="html">
-   <div class="b-post-modal">
+   <div class="b-comment-modal">
      <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
      <div class="b-post-modal__inner">
-          <app-single-post :post='{ data:post, i:index }' v-if='show'/>
+          <!-- <app-single-post :post='{ data:post, i:index }' v-if='show'/> -->
      </div>
    </div>
 </template>
 
 <script>
-import { posts } from '@/api.js'
+import { comments } from '@/api.js'
 import AppSinglePost from '@/components/SinglePost.vue'
 export default {
   data(){
@@ -31,11 +31,11 @@ export default {
     }
   },
   created(){
-      posts.getById(this.id)
+      comments.getByPostId( this.id, 1, 50 )
       .then( res => {
         console.log(res.data.data);
-        this.post = res.data.data;
-        this.show = true;
+        //this.post = res.data.data;
+        //this.show = true;
       })
   },
   components:{
@@ -47,7 +47,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/master-scss.scss";
 
-.b-post-modal{
+.b-comment-modal{
   width: 100%;
   height: 100vh;
   position: fixed;

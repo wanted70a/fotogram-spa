@@ -1,8 +1,9 @@
 <template>
   <div class="p-home l">
     <app-post-modal v-if='postModal' :id='modalId' :index='modalIndex' @closePostModal='closePostModal($event)'/>
+    <app-comments-modal v-if='commentsModal' :id='modalId' :index='modalIndex' @closePostModal='closeCommentsModal($event)'/>
     <div class="b-feed">
-      <app-single-post v-for='(p, i) in feed' :key='i' :post='{data:p, i:i}'  v-on:showPostModal='toggleModal($event)'/>
+      <app-single-post v-for='(p, i) in feed' :key='i' :post='{data:p, i:i}'  v-on:showPostModal='togglePostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)'/>
     </div>
   </div>
 </template>
@@ -11,6 +12,7 @@
 // @ is an alias to /src
 import AppSinglePost from '@/components/SinglePost.vue'
 import AppPostModal from '@/components/modals/PostModal.vue'
+import AppCommentsModal from '@/components/modals/CommentsModal.vue'
 import { posts } from '@/api.js'
 
 export default {
@@ -19,6 +21,7 @@ export default {
     return{
       feed:[],
       postModal:false,
+      commentsModal:false,
       modalId:'',
       modalIndex:''
     }
@@ -34,15 +37,22 @@ export default {
     })
   },
   methods:{
-    toggleModal( data ){
+    togglePostModal( data ){
       this.postModal = true;
-      console.log('DATA', data);
       this.modalId = data.id;
       document.body.style.overflowY = "hidden";
-      console.log( data );
+    },
+    toggleCommentsModal( data ){
+      this.postModal = true;
+      this.modalId = data.id;
+      document.body.style.overflowY = "hidden";
     },
     closePostModal(){
       this.postModal = false;
+      document.body.style.overflowY = "visible";
+    },
+    closeCommentsModal(){
+      this.commentsModal = false;
       document.body.style.overflowY = "visible";
     }
   }

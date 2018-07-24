@@ -60,7 +60,7 @@ export default {
    },
    methods:{
      showPostModal(){
-       console.log(`emit shiwPostModal ${this.post.data.id}` );
+       console.log(`emit showPostModal ${this.post.data.id}` );
        this.$emit('showPostModal', { id:this.post.data.id, index:this.post.i } );
      },
      showCommentsModal(){

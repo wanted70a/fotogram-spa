@@ -1,6 +1,6 @@
 <template>
   <div class="p-home l">
-    <app-post-modal v-if='postModal' :id='modalId' :index='modalIndex' @closePostModal='closePostModal($event)'/>
+    <app-post-modal v-if='postModal' :id='modalId' :index='modalIndex' @closePostModal='closePostModal($event)' @pass='toggleCommentsModal($event)'/>
     <app-comments-modal v-if='commentsModal' :id='modalId' :index='modalIndex' @closePostModal='closeCommentsModal($event)'/>
     <div class="b-feed">
       <app-single-post v-for='(p, i) in feed' :key='i' :post='{data:p, i:i}'  v-on:showPostModal='togglePostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)'/>
@@ -28,7 +28,8 @@ export default {
   },
   components: {
     AppSinglePost,
-    AppPostModal
+    AppPostModal,
+    AppCommentsModal,
   },
   created(){
   posts.getList(1, 16).then((res) => {
@@ -43,7 +44,8 @@ export default {
       document.body.style.overflowY = "hidden";
     },
     toggleCommentsModal( data ){
-      this.postModal = true;
+      console.log('I am in ROOT', data);
+      this.commentsModal = true;
       this.modalId = data.id;
       document.body.style.overflowY = "hidden";
     },

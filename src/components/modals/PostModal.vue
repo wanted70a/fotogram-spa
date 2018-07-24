@@ -2,7 +2,7 @@
    <div class="b-post-modal">
      <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
      <div class="b-post-modal__inner">
-          <app-single-post :post='{ data:post, i:index }' v-if='show'/>
+          <app-single-post :post='{ data:post, i:index }' v-if='show' v-on:showCommentsModal='toggleCommentsModal($event)'/>
      </div>
    </div>
 </template>
@@ -28,7 +28,11 @@ export default {
   methods:{
     closePostModal(){
       this.$emit('closePostModal')
-    }
+    },
+    toggleCommentsModal( data ){
+      console.log('I am in POST MODAL', data);
+      this.$emit('pass', data)
+    },
   },
   created(){
       posts.getById(this.id)

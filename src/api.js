@@ -93,10 +93,10 @@ export const posts = {
 }
 
 export const comments = {
-    getByPostId( postId, page, amount ){
+    getByPostId( post_id, page, amount ){
         let config = {};
         config.headers = api.authHeader();
-        config.params = { page, amount }
+        config.params = { post_id, page, amount }
         return api.get( COMMENTS, config )
     }
 }

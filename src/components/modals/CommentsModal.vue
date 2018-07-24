@@ -1,19 +1,20 @@
 <template lang="html">
    <div class="b-comment-modal">
      <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
-     <div class="b-post-modal__inner">
-          <!-- <app-single-post :post='{ data:post, i:index }' v-if='show'/> -->
+     <div class="b-comment-modal__inner">
+       <h1>COMMENTS {{id}}</h1>
+            <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i }'/>
      </div>
    </div>
 </template>
 
 <script>
 import { comments } from '@/api.js'
-import AppSinglePost from '@/components/SinglePost.vue'
+import AppSingleComment from '@/components/SingleComment.vue'
 export default {
   data(){
     return{
-        post:{},
+        comments:[],
         show:false,
     }
   },
@@ -34,12 +35,12 @@ export default {
       comments.getByPostId( this.id, 1, 50 )
       .then( res => {
         console.log(res.data.data);
-        //this.post = res.data.data;
+        this.comments = res.data.data;
         //this.show = true;
       })
   },
   components:{
-    AppSinglePost
+    AppSingleComment
   }
 }
 </script>
@@ -63,9 +64,10 @@ export default {
   &__inner{
       margin: 0 auto;
       width:48rem;
+      background: rgba(255,255,255,0.8);
 
-      .c-post{
-          width: 100%;
+      h1{
+        color: white;
       }
   }
 }

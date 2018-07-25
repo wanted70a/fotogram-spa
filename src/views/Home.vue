@@ -1,5 +1,6 @@
 <template>
   <div class="p-home l">
+    <app-header/>
     <app-post-modal v-if='postModal' :id='modalId' :index='modalIndex' @closePostModal='closePostModal($event)' @pass='toggleCommentsModal($event)'/>
     <app-comments-modal v-if='commentsModal' :id='modalId' :index='modalIndex' @closePostModal='closeCommentsModal($event)'/>
     <div class="b-feed">
@@ -10,6 +11,7 @@
 
 <script>
 // @ is an alias to /src
+import AppHeader from '@/components/Header.vue'
 import AppSinglePost from '@/components/SinglePost.vue'
 import AppPostModal from '@/components/modals/PostModal.vue'
 import AppCommentsModal from '@/components/modals/CommentsModal.vue'
@@ -30,6 +32,7 @@ export default {
     AppSinglePost,
     AppPostModal,
     AppCommentsModal,
+    AppHeader,
   },
   created(){
   posts.getList(1, 16).then((res) => {
@@ -46,6 +49,7 @@ export default {
     toggleCommentsModal( data ){
       console.log('I am in ROOT', data);
       this.commentsModal = true;
+      this.postModal = false;
       this.modalId = data.id;
       document.body.style.overflowY = "hidden";
     },

@@ -44,17 +44,21 @@ export default {
 
   methods:{
     loginUser( data ){
+        var vm = this;
+
       return login.login( data )
       .then( res => {
         localStorage.token = res.data.token;
         localStorage.userId = res.data.data.id;
-        this.$router.push({name:'home'})
+        this.$router.push({name:'home'});
+        console.log(vm);
       })
     }
   },
 
   mounted(){
     this.show = true;
+    console.log(this.$data);
   }
 }
 </script>

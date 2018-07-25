@@ -58,7 +58,7 @@ export default {
   top: 0;
   left: 0;
   background: rgba(0,0,0,0.9);
-  z-index: 2;
+  z-index: 12;
   padding-top: 5rem;
   @include breakpoint(overPhone){
       padding-top: 15rem;
@@ -70,6 +70,10 @@ export default {
 
       .c-post{
           width: 100%;
+          border: none;
+          &:hover{
+              border:none;
+          }
       }
   }
 }

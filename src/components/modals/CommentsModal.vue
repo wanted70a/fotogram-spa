@@ -28,7 +28,7 @@ export default {
   },
   methods:{
     closePostModal(){
-      this.$emit('closePostModal')
+      this.$emit('closePostModal');
     }
   },
   created(){
@@ -57,6 +57,7 @@ export default {
   background: rgba(0,0,0,0.9);
   z-index: 2;
   padding-top: 5rem;
+  z-index: 13;
   @include breakpoint(overPhone){
       padding-top: 15rem;
   }

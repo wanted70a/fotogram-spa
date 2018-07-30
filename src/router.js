@@ -4,6 +4,9 @@ import Home from './views/Home.vue'
 import Register from './views/Register.vue'
 import Login from './views/Login.vue'
 import Terms from './views/Terms.vue'
+import User from './views/User.vue'
+import NewPost from './views/NewPost.vue'
+import Notifications from './views/Notifications.vue'
 
 Vue.use(Router)
 
@@ -29,6 +32,21 @@ export default new Router({
       path:'/terms',
       name:'terms',
       component: Terms
+    },
+    {
+      path:'/new-post',
+      name:'newPost',
+      component: NewPost
+    },
+    {
+      path:'/user/:id',
+      name:'user',
+      component: User
+    },
+    {
+      path:'/notifications',
+      name:'notifications',
+      component: Notifications
     }
   ]
 })

@@ -16,6 +16,7 @@
             <video controls :src="IMG + post.data.media"  ></video>
       </div>
     </div>
+    <app-add-comment v-if='addComment'/>
     <div class="c-post__info">
       <div class="c-post__info__cta">
         <div class="c-post__info__like">
@@ -23,7 +24,7 @@
               <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/>
           </svg>
         </div>
-        <div class="c-post__info__comments">
+        <div class="c-post__info__comments" @click='showAddComment' :class='{active:addComment}'>
           <svg class='c-post__info__comments__picto' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32z"/>
           </svg>
@@ -45,15 +46,18 @@
 <script>
 import { IMG } from '@/api.js'
 import AppSingleComment from '@/components/SingleComment.vue'
+import AppAddComment from '@/components/AddComment.vue'
 export default {
   data(){
        return {
            IMG:IMG,
+           addComment:false,
        }
    },
 
    components:{
      AppSingleComment,
+     AppAddComment,
    },
    props:{
      post:{
@@ -69,6 +73,12 @@ export default {
      showCommentsModal(){
          console.log(`emit showCommentsModal ${this.post.data.id}` );
          this.$emit('showCommentsModal', { id:this.post.data.id, index:this.post.i } );
+     },
+     showAddComment(){
+       this.addComment  = !this.addComment;
+     },
+     test(){
+       console.log(124);
      }
    }
 }
@@ -193,7 +203,20 @@ export default {
         &:hover{
           @include breakpoint(overPhone){
             cursor: pointer;
-            fill:rgba(9,243,162,0.6);
+            fill:$color-black;
+          }
+        }
+      }
+
+      &.active{
+        svg{
+           fill:$color-black;
+        }
+        &:hover{
+          svg{
+             @include breakpoint(overPhone){
+               fill:$color-green;
+             }
           }
         }
       }

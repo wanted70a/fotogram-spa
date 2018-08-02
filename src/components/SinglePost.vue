@@ -16,7 +16,7 @@
             <video controls :src="IMG + post.data.media"  ></video>
       </div>
     </div>
-    <app-add-comment v-if='addComment' modal='true' postId='post.data.id'/>
+    <app-add-comment v-if='addComment' modal='true' postId='post.data.id' @closeAddComment='closeAddComment'/>
     <div class="c-post__info">
       <div class="c-post__info__cta">
         <div class="c-post__info__like">
@@ -77,8 +77,8 @@ export default {
      showAddComment(){
        this.addComment  = !this.addComment;
      },
-     test(){
-       console.log(124);
+     closeAddComment(){
+       this.addComment = false;
      }
    }
 }

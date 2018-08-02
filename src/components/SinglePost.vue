@@ -16,7 +16,7 @@
             <video controls :src="IMG + post.data.media"  ></video>
       </div>
     </div>
-    <app-add-comment v-if='addComment'/>
+    <app-add-comment v-if='addComment' modal='true' postId='post.data.id'/>
     <div class="c-post__info">
       <div class="c-post__info__cta">
         <div class="c-post__info__like">
@@ -87,6 +87,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/master-scss.scss";
 .c-post{
+  position: relative;
   display: flex;
   flex-flow: column wrap;
   align-items: flex-start;

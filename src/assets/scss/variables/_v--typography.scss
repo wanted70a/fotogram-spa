@@ -21,7 +21,6 @@ html {
 body {
     font-family:'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
-    margin-top:7.5rem;
 
     &.fixed {
       @include breakpoint(phone) {

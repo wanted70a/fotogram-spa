@@ -65,6 +65,9 @@ export default {
 
 <style lang="scss"  scoped>
 @import "@/assets/scss/master-scss.scss";
+body{
+  margin-top: 0;
+}
 .p-login{
   padding-top: 10rem;
   width:100%;

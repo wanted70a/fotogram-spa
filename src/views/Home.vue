@@ -1,7 +1,7 @@
 <template>
   <div class="p-home l">
     <app-header/>
-    <app-post-modal v-if='postModal' :id='modalId' :index='modalIndex' @closePostModal='closePostModal($event)' @pass='toggleCommentsModal($event)'/>
+    <app-post-modal v-if='postModal' :id='modalId' :index='modalIndex' :postsIds='feed.map( (item)=> item.id )' @closePostModal='closePostModal($event)' @pass='toggleCommentsModal($event)'/>
     <app-comments-modal v-if='commentsModal' :id='modalId' :index='modalIndex' @closePostModal='closeCommentsModal($event)'/>
     <div class="b-feed">
       <app-single-post v-for='(p, i) in feed' :key='i' :post='{data:p, i:i}'  v-on:showPostModal='togglePostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)'/>
@@ -36,14 +36,16 @@ export default {
   },
   created(){
   posts.getList(1, 16).then((res) => {
-      console.log(res.data.data[9])
+      console.log(res.data.data)
       this.feed = res.data.data;
     })
   },
   methods:{
     togglePostModal( data ){
+      console.log('I am in ROOT', data);
       this.postModal = true;
       this.modalId = data.id;
+      this.modalIndex = data.index;
       document.body.style.overflowY = "hidden";
     },
     toggleCommentsModal( data ){
@@ -51,6 +53,7 @@ export default {
       this.commentsModal = true;
       this.postModal = false;
       this.modalId = data.id;
+      this.modalIndex = data.index;
       document.body.style.overflowY = "hidden";
     },
     closePostModal(){
@@ -67,6 +70,9 @@ export default {
 
 <style lang="scss">
   @import "@/assets/scss/master-scss.scss";
+  body{
+    margin-top: 7.5rem;
+  }
   .b-feed{
     display: flex;
     flex-flow: column wrap;

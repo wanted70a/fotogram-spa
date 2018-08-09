@@ -92,11 +92,16 @@ export default {
   flex-flow: column wrap;
   align-items: flex-start;
   width:100%;
+  opacity: 1;
   margin-bottom: 3rem;
-  transition: all 0.3s ease;
+  transition: all 0.6s ease;
   border-bottom: 2px solid rgba(0,0,0,0);
   @include breakpoint(overPhone){
     width:24%;
+  }
+
+  &.hidden{
+    opacity: 0;
   }
   &:hover{
       border-bottom: 2px solid black;

@@ -7,7 +7,8 @@ export const POSTS          =      API_URL +    '/posts'
 export const POSTS_TEST     =      API_URL +    '/posts/test?amount=10&page=1'
 export const IMG            =      ROOT    +    '/storage/'
 export const USER_AUTH      =      API_URL +    '/users/auth'
-export const USER           =      API_URL +    '/users/find'
+export const USERS          =      API_URL +    '/users/find'
+export const USER           =      API_URL +    '/users'
 export const COMMENTS       =      API_URL +    '/comments'
 
 const api = {
@@ -99,4 +100,12 @@ export const comments = {
         config.params = { post_id, page, amount }
         return api.get( COMMENTS, config )
     }
+}
+
+export const user = {
+  getAuthUser(){
+    let config = {};
+    config.headers = api.authHeader();
+    return api.get(`${USER}/auth`, config)
+  }
 }

@@ -1,10 +1,9 @@
 <template>
   <div class="p-home l">
-    <app-header/>
-    <app-post-modal v-if='postModal' :id='modalId' :index='modalIndex' :postsIds='feed.map( (item)=> item.id )' @closePostModal='closePostModal($event)' @pass='toggleCommentsModal($event)'/>
-    <app-comments-modal v-if='commentsModal' :id='modalId' :index='modalIndex' @closePostModal='closeCommentsModal($event)'/>
+    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)'/>
+    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.Index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)'/>
     <div class="b-feed">
-      <app-single-post v-for='(p, i) in feed' :key='i' :post='{data:p, i:i}'  v-on:showPostModal='togglePostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)'/>
+      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)'/>
     </div>
   </div>
 </template>
@@ -22,46 +21,61 @@ export default {
   data(){
     return{
       feed:[],
-      postModal:false,
-      commentsModal:false,
-      modalId:'',
-      modalIndex:''
+      commentsModal:{
+        show:false,
+      },
+      post:{
+        show:false,
+        id:'',
+        index:0,
+        data:{},
+      }
     }
   },
+
   components: {
     AppSinglePost,
     AppPostModal,
     AppCommentsModal,
-    AppHeader,
   },
+  computed:{
+    feedIds() {
+      return this.feed.map( ( item )=> item.id );
+    }
+  },
+
   created(){
-  posts.getList(1, 16).then((res) => {
-      console.log(res.data.data)
-      this.feed = res.data.data;
+    posts.getList(1, 16).then((res) => {
+        console.log(res.data.data)
+        this.feed = res.data.data;
+        console.log(this.feedIds);
     })
   },
   methods:{
-    togglePostModal( data ){
-      console.log('I am in ROOT', data);
-      this.postModal = true;
-      this.modalId = data.id;
-      this.modalIndex = data.index;
-      document.body.style.overflowY = "hidden";
+    showPostModal( data ){
+      this.post.show = false;
+      posts.getById( data.id )
+      .then( res => {
+        this.post.data = res.data.data;
+        this.post.id = data.id;
+        this.post.index = data.index;
+        this.post.show = true;
+        document.body.style.overflowY = "hidden";
+      });
     },
     toggleCommentsModal( data ){
-      console.log('I am in ROOT', data);
-      this.commentsModal = true;
-      this.postModal = false;
-      this.modalId = data.id;
-      this.modalIndex = data.index;
+      this.commentsModal.show = true;
+      this.post.show = false;
+      this.post.id = data.id;
+      this.post.index = data.index;
       document.body.style.overflowY = "hidden";
     },
     closePostModal(){
-      this.postModal = false;
+      this.post.show = false;
       document.body.style.overflowY = "visible";
     },
     closeCommentsModal(){
-      this.commentsModal = false;
+      this.commentsModal.show = false;
       document.body.style.overflowY = "visible";
     }
   }
@@ -70,14 +84,13 @@ export default {
 
 <style lang="scss">
   @import "@/assets/scss/master-scss.scss";
-  body{
-    margin-top: 7.5rem;
-  }
+
   .b-feed{
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
     padding-top: 3rem;
+    margin-top: 7.5rem;
     @include breakpoint(overPhone){
         flex-flow: row wrap;
     }

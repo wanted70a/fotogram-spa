@@ -1,13 +1,11 @@
 <template lang="html">
   <header class='b-header'>
       <nav class='b-header__nav'>
-          <router-link v-if='isDesk'  :to="{ name: 'home', params: {} }" class='b-header__nav__link'>
+          <router-link :to="{ name: 'home', params: {} }" class='b-header__nav__link'>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M488 312.7V456c0 13.3-10.7 24-24 24H348c-6.6 0-12-5.4-12-12V356c0-6.6-5.4-12-12-12h-72c-6.6 0-12 5.4-12 12v112c0 6.6-5.4 12-12 12H112c-13.3 0-24-10.7-24-24V312.7c0-3.6 1.6-7 4.4-9.3l188-154.8c4.4-3.6 10.8-3.6 15.3 0l188 154.8c2.7 2.3 4.3 5.7 4.3 9.3zm83.6-60.9L488 182.9V44.4c0-6.6-5.4-12-12-12h-56c-6.6 0-12 5.4-12 12V117l-89.5-73.7c-17.7-14.6-43.3-14.6-61 0L4.4 251.8c-5.1 4.2-5.8 11.8-1.6 16.9l25.5 31c4.2 5.1 11.8 5.8 16.9 1.6l235.2-193.7c4.4-3.6 10.8-3.6 15.3 0l235.2 193.7c5.1 4.2 12.7 3.5 16.9-1.6l25.5-31c4.2-5.2 3.4-12.7-1.7-16.9z"/></svg>
           </router-link>
-          <router-link v-if='isDesk' :to="{ name: 'user', params: { id: 123 }}" class='b-header__nav__link'>
-            <img v-if='userImage' :src='IMG + userImage' alt="">
-          </router-link>
-          <router-link v-if='isDesk' :to="{ name: 'newPost', params: {} }" class='b-header__nav__link'>
+          <router-link :to="{ name: 'user', params: { id: 123 }}" class='b-header__nav__link'>2</router-link>
+          <router-link :to="{ name: 'newPost', params: {} }" class='b-header__nav__link'>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/></svg>
           </router-link>
           <router-link :to="{ name: 'notifications', params: {} }" class='b-header__nav__link'>
@@ -29,28 +27,13 @@
 </template>
 
 <script>
-import { user } from '@/api.js'
-import { IMG } from '@/api.js'
-
 export default {
   data(){
     return{
-      IMG:IMG,
-      userImage:''
+      isMobile:false,
+      isDesktop:false,
     }
   },
-  props:{
-    isDesk:{
-      required: true,
-      value: Boolean
-    }
-  },
-  created(){
-    user.getAuthUser( localStorage.userId )
-    .then( res => {
-      this.userImage = res.data.data.image.profile;
-    })
-  }
 }
 </script>
 
@@ -70,7 +53,7 @@ export default {
 .b-header{
     position:fixed;
     z-index: 15;
-    border-bottom: 1px solid gray;
+    border-bottom: 2px solid gray;
     top:0;
     left: 0;
     display: flex;
@@ -88,26 +71,20 @@ export default {
         display: flex;
         justify-content: space-between;
         @include breakpoint(overPhone){
-
+            width: 15rem;
         }
         &__link{
             position: relative;
-            width:5rem;
-            height: 5rem;
-            line-height: 5rem;
+            width:3.5rem;
+            height: 3.5rem;
             border-radius: 50%;
             cursor: pointer;
             background: white;
             border: 1px solid #232429;
+            line-height: 3.5rem;
             text-align: center;
             overflow: hidden;
             transition: all 0.3s ease;
-            @include breakpoint(overPhone){
-              width:3.5rem;
-              height: 3.5rem;
-              line-height: 3.5rem;
-              margin: 0 1rem;
-            }
 
             &.router-link-exact-active {
              background-color: #232429;
@@ -129,49 +106,34 @@ export default {
 
            &:hover{
               background-color: #232429;
-              color: white;
               svg{
                  fill: $color-white;
+                 color: white;
               }
            }
         }
     }
 
     &__breadcrumbs{
-      flex: 1;
-      text-align: center;
+
     }
     &__util{
         display: flex;
         justify-content: space-between;
         @include breakpoint(overPhone){
-
+            width: 8rem;
         }
         &__item{
           position: relative;
           border-radius: 50%;
           cursor: pointer;
-          transition: all 0.3s ease;
           background: white;
           border: 1px solid #232429;
+          line-height: 3.5rem;
           text-align: center;
           overflow: hidden;
-          line-height: 5rem;
-          width:5rem;
-          height: 5rem;
-          margin: 0 1rem;
-          @include breakpoint(overPhone){
-            line-height: 3.5rem;
-            width:3.5rem;
-            height: 3.5rem;
-          }
-          &:hover{
-             background-color: #232429;
-             color: white;
-             svg{
-                fill: $color-white;
-             }
-          }
+          width:3.5rem;
+          height: 3.5rem;
         }
         &__search{
             svg{

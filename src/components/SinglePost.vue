@@ -10,7 +10,8 @@
     </div>
     <div class="c-post__media" @click='showPostModal'>
       <div class="c-post__media__img" v-if='post.data.type_id === 1'>
-          <img :src='IMG + ( post.data.media.medium ?post.data.media.medium  :post.data.media.placeholder )' alt="">
+          <img v-if='mediaSize' :src='IMG + ( post.data.media[mediaSize] ?post.data.media[mediaSize]  :post.data.media.placeholder )' alt="">
+          <img v-else :src='IMG + ( post.data.media.medium ?post.data.media.medium  :post.data.media.placeholder )' alt="">
       </div>
       <div class="c-post__media__video" v-else='post.data.type_id === 1'>
             <video controls :src="IMG + post.data.media"  ></video>
@@ -63,11 +64,15 @@ export default {
      post:{
        type:Object,
        required:true
+     },
+     mediaSize:{
+       type:String,
+       required:false,
      }
    },
    methods:{
      showPostModal(){
-       console.log(`emit showPostModal ${this.post.data.id}` );
+       console.log(`emit showPostModal from SINGLEPOST.vue ${this.post.data.id}` );
        this.$emit('showPostModal', { id:this.post.data.id, index:this.post.i } );
      },
      showCommentsModal(){

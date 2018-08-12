@@ -1,13 +1,15 @@
 <template lang="html">
-   <div class="b-comment-modal">
-     <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
-     <div class="b-comment-modal__inner">
-       <div class="b-comment-modal__list">
-         <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i }'/>
-       </div>
-       <app-add-comment/>
-     </div>
-   </div>
+  <transition name="slideRight">
+    <div class="b-comment-modal">
+      <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
+      <div class="b-comment-modal__inner">
+        <div class="b-comment-modal__list">
+          <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i }'/>
+        </div>
+        <app-add-comment/>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -19,6 +21,8 @@ export default {
     return{
         comments:[],
         show:false,
+        page:1,
+        amount:50
     }
   },
   props:{
@@ -35,11 +39,10 @@ export default {
     }
   },
   created(){
-      comments.getByPostId( this.id, 1, 50 )
+      comments.getByPostId( this.id, this.page, this.amount)
       .then( res => {
         console.log(res.data.data);
         this.comments = res.data.data;
-        //this.show = true;
       })
   },
   components:{
@@ -60,12 +63,8 @@ export default {
   left: 0;
   background: rgba(0,0,0,0.9);
   z-index: 2;
-  padding-top: 5rem;
+  padding-top: 15rem;
   z-index: 13;
-  @include breakpoint(overPhone){
-      padding-top: 15rem;
-  }
-
   &__inner{
       margin: 0 auto;
       width:48rem;

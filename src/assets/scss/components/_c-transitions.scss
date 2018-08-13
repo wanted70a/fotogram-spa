@@ -34,4 +34,13 @@
 }
 
 .slideRight-enter-active,
-.slideRight-leave-active { transition: all 400ms ease }
+.slideRight-leave-active { transition: all 400ms ease; }
+
+/*POSTS LIST*/
+.post-list-enter-active, .post-list-leave-active {
+  transition: all 1s;
+}
+.post-list-enter, .post-list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}

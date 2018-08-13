@@ -2,9 +2,9 @@
   <div class="p-home l">
     <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)'/>
     <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.Index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)'/>
-    <div class="b-feed">
+    <transition-group name="post-list" tag="div" class="b-feed">
       <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)'/>
-    </div>
+    </transition-group>
   </div>
 </template>
 
@@ -21,6 +21,8 @@ export default {
   data(){
     return{
       feed:[],
+      amount:16,
+      page:1,
       commentsModal:{
         show:false,
       },
@@ -45,11 +47,16 @@ export default {
   },
 
   created(){
-    posts.getList(1, 16).then((res) => {
+    posts.getList(this.page++, this.amount)
+    .then((res) => {
         console.log(res.data.data)
         this.feed = res.data.data;
+        window.addEventListener('scroll', this.scrollTrigger );
         console.log(this.feedIds);
-    })
+    });
+  },
+  destroyed: function () {
+     window.removeEventListener('scroll', this.scrollTrigger );
   },
   methods:{
     showPostModal( data ){
@@ -77,6 +84,19 @@ export default {
     closeCommentsModal(){
       this.commentsModal.show = false;
       document.body.style.overflowY = "visible";
+    },
+    scrollTrigger(){
+        var d = document.documentElement;
+        var offset = d.scrollTop + window.innerHeight;
+        var height = d.offsetHeight;
+        if (offset === height) {
+            //fetch new posts adn psuh them to current feed array
+            posts.getList(this.page++, this.amount)
+            .then((res) => {
+                let newFeed = res.data.data;
+                this.feed = [...this.feed, ...res.data.data ];
+            });
+        }
     }
   }
 }

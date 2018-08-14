@@ -3,7 +3,7 @@
     <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)'/>
     <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.Index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)'/>
     <transition-group name="post-list" tag="div" class="b-feed">
-      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)'/>
+      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
     </transition-group>
   </div>
 </template>
@@ -85,16 +85,23 @@ export default {
       this.commentsModal.show = false;
       document.body.style.overflowY = "visible";
     },
+    newCommentAdded( emitedData ){
+      console.log(emitedData);
+      this.$set(this.feed[emitedData.index], 'comments', emitedData.comments)
+    },
     scrollTrigger(){
         var d = document.documentElement;
         var offset = d.scrollTop + window.innerHeight;
         var height = d.offsetHeight;
-        if (offset === height) {
+        if (offset > height - 150) {
+          console.log('trigger');
             //fetch new posts adn psuh them to current feed array
+            window.removeEventListener('scroll', this.scrollTrigger );
             posts.getList(this.page++, this.amount)
             .then((res) => {
                 let newFeed = res.data.data;
                 this.feed = [...this.feed, ...res.data.data ];
+                window.addEventListener('scroll', this.scrollTrigger );
             });
         }
     }

@@ -99,6 +99,11 @@ export const comments = {
         config.headers = api.authHeader();
         config.params = { post_id, page, amount }
         return api.get( COMMENTS, config )
+    },
+
+    postNewById( params ){
+      let headers = api.authHeader();
+      return api.post (`${COMMENTS}`, params, { headers } )
     }
 }
 

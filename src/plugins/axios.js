@@ -14,7 +14,7 @@ let config = {
   // timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
   baseURL: API_URL,
-  timeout: 1000,
+  timeout: 10000,
 };
 
 const _axios = axios.create(config);

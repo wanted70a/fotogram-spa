@@ -52,7 +52,6 @@ export default {
         console.log(res.data.data)
         this.feed = res.data.data;
         window.addEventListener('scroll', this.scrollTrigger );
-        console.log(this.feedIds);
     });
   },
 
@@ -69,6 +68,7 @@ export default {
         this.post.index = data.index;
         this.post.show = true;
         document.body.style.overflowY = "hidden";
+        document.body.style.paddingRight = "15px";
       });
     },
     toggleCommentsModal( data ){
@@ -77,14 +77,17 @@ export default {
       this.post.id = data.id;
       this.post.index = data.index;
       document.body.style.overflowY = "hidden";
+      document.body.style.paddingRight = "15px";
     },
     closePostModal(){
       this.post.show = false;
       document.body.style.overflowY = "visible";
+      document.body.style.paddingRight = "0";
     },
     closeCommentsModal(){
       this.commentsModal.show = false;
       document.body.style.overflowY = "visible";
+      document.body.style.paddingRight = "0";
     },
     newCommentAdded( emitedData ){
       console.log(emitedData);

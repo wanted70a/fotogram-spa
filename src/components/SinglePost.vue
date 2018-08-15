@@ -87,7 +87,13 @@ export default {
        this.$emit('newComment', emitedData )
        console.log(emitedData);
      }
-   }
+    },
+    created(){
+        //console.log(this.$parent);
+    },
+    mounted(){
+        console.log(this.$parent.$children);
+    }
 }
 </script>
 

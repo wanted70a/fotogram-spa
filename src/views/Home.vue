@@ -55,6 +55,7 @@ export default {
         console.log(this.feedIds);
     });
   },
+
   destroyed: function () {
      window.removeEventListener('scroll', this.scrollTrigger );
   },
@@ -104,7 +105,7 @@ export default {
                 window.addEventListener('scroll', this.scrollTrigger );
             });
         }
-    }
+    },
   }
 }
 </script>

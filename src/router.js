@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Test from './components/Test.vue'
+import TestChild from './components/TestChild.vue'
 import Home from './views/Home.vue'
 import Register from './views/Register.vue'
 import Login from './views/Login.vue'
@@ -47,6 +49,18 @@ export default new Router({
       path:'/notifications',
       name:'notifications',
       component: Notifications
+    },
+    {
+        path:'/test',
+        name:'test',
+        component: Test,
+        children: [
+            {
+              path: '2',
+              name: 'testchild',
+              component: TestChild,
+            },
+        ]
     }
   ]
 })

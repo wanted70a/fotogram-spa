@@ -1,6 +1,8 @@
 <template lang="html">
-  <div>
+  <div class='p-test'>
     <p @click='changeTest("New Title" + Math.random())'>{{msgToShow}}</p>
+    <router-link :to="{ name: 'testchild' }">CHILDREN</router-link>
+    <router-view />
   </div>
 </template>
 
@@ -13,8 +15,7 @@ export default {
     }
   },
   created(){
-    this.show = this.visibility;
-    console.log(2);
+    console.log('PARENT');
   },
   methods:{
     changeTest( newTest){
@@ -25,5 +26,8 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="scss" scoped>
+.p-test{
+    margin-top: 15rem;
+}
 </style>

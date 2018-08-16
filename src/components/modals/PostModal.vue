@@ -11,7 +11,7 @@
       </span>
     </div>
     <div class="b-post-modal__inner">
-         <app-single-post :post='{ data:postData, i:index }' mediaSize='large' v-on:showCommentsModal='toggleCommentsModal($event)'/>
+         <app-single-post :post='{ data:postData, i:index }' mediaSize='large' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
     </div>
   </div>
 </transition>
@@ -61,6 +61,11 @@ export default {
       this.$emit('updatePostModal', { id:this.postsIds[postIndex], index:postIndex } );
       console.log(`updated - return id=${ this.postsIds[postIndex] }`);
     },
+    newCommentAdded( emitedData ){
+      this.$emit('newComment', emitedData )
+      console.log(emitedData);
+    },
+
   },
   components:{
     AppSinglePost

@@ -1,7 +1,7 @@
 <template>
   <div class="p-home l">
-    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)'/>
-    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.Index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)'/>
+    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
+    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'/>
     <transition-group name="post-list" tag="div" class="b-feed">
       <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
     </transition-group>
@@ -90,8 +90,11 @@ export default {
       document.body.style.paddingRight = "0";
     },
     newCommentAdded( emitedData ){
+      console.log('HP new comment');
       console.log(emitedData);
       this.$set(this.feed[emitedData.index], 'comments', emitedData.comments)
+      this.$set(this.post.data, 'comments', emitedData.comments)
+
     },
     scrollTrigger(){
         var d = document.documentElement;

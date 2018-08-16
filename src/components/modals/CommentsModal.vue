@@ -4,9 +4,10 @@
       <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
       <div class="b-comment-modal__inner">
         <div class="b-comment-modal__list">
+
           <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i }'/>
         </div>
-        <app-add-comment/>
+        <app-add-comment :postId='id' :index='index' @closeAddComment='closeAddComment($event)'/>
       </div>
     </div>
   </transition>
@@ -36,6 +37,15 @@ export default {
   methods:{
     closePostModal(){
       this.$emit('closePostModal');
+    },
+    closeAddComment( emitedData ){
+      console.log(`I am in comentsModal`);
+      console.log(emitedData);
+      this.$emit('newComment', emitedData)
+      comments.getByPostId( this.id, this.page, this.amount)
+      .then( res => {
+        this.comments = res.data.data;
+      })
     }
   },
   created(){

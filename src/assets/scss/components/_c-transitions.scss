@@ -46,13 +46,14 @@
 }
 
 /*SHOW ADD COMMENT*/
-.showMe-enter{ transform: translateY(-5px ); }
-.showMe-leave-to{ transform: translateY( 5px ); }
+.showMe-enter{ transform: translateY(-15px ); opacity: 0;}
+.showMe-leave-to{ transform: translateY( 25px ); opacity: 0;}
 
 .showMe-enter-to,
 .showMe-leave{
     transform: translateX(0);
+    opacity: 1;
 }
 
 .showMe-enter-active,
-.showMe-leave-active { transition: all 250ms ease }
+.showMe-leave-active { transition: all 350ms ease }

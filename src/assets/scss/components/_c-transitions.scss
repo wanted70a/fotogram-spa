@@ -44,3 +44,15 @@
   opacity: 0;
   transform: translateY(30px);
 }
+
+/*SHOW ADD COMMENT*/
+.showMe-enter{ transform: translateY(-5px ); }
+.showMe-leave-to{ transform: translateY( 5px ); }
+
+.showMe-enter-to,
+.showMe-leave{
+    transform: translateX(0);
+}
+
+.showMe-enter-active,
+.showMe-leave-active { transition: all 250ms ease }

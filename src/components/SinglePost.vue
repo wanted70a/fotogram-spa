@@ -17,7 +17,9 @@
             <video controls :src="IMG + post.data.media"  ></video>
       </div>
     </div>
-    <app-add-comment v-if='addComment' modal='true' :postId='post.data.id' :index='post.i' @closeAddComment='closeAddComment($event)'/>
+    <transition name="showMe">
+      <app-add-comment v-if='addComment' :class='{visible:addComment}' modal='true' :postId='post.data.id' :index='post.i' @closeAddComment='closeAddComment($event)'/>
+    </transition>
     <div class="c-post__info">
       <div class="c-post__info__cta">
         <div class="c-post__info__like">

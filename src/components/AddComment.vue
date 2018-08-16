@@ -30,6 +30,8 @@ export default {
             this.$emit('closeAddComment', {comments:res.data.data, index:this.index} );
           })
         })
+        console.log('comment updat');
+        this.userComment = '';
       }
     }
   }

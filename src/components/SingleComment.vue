@@ -2,7 +2,9 @@
   <div class="c-comment">
     <div class="c-comment__content">
       <div class="c-comment__content__img">
-        <img :src='IMG + ( comment.data.user_image.comment ?comment.data.user_image.comment :comment.data.user_image.placeholder )' alt="">
+        <router-link :to="{ name: 'user', params: { id:comment.data.user_id } }">
+          <img :src='IMG + ( comment.data.user_image.comment ?comment.data.user_image.comment :comment.data.user_image.placeholder )' alt="">
+        </router-link>
       </div>
       <p class='c-comment__content__text'>{{comment.data.body}}</p>
     </div>

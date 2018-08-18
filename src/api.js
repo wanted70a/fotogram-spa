@@ -90,6 +90,12 @@ export const posts = {
       let config = {};
       config.headers = api.authHeader();
       return api.get( `${POSTS}/${id}` , config)
+  },
+  getByUserId( user_id, page, amount ){
+      let config = {};
+      config.headers = api.authHeader();
+      config.params  = { user_id, page, amount };
+      return api.get( `${POSTS}` , config)
   }
 }
 
@@ -112,5 +118,12 @@ export const user = {
     let config = {};
     config.headers = api.authHeader();
     return api.get(`${USER}/auth`, config)
+  },
+
+  getById( id ){
+    let config = {};
+    config.headers = api.authHeader();
+    config.params = { id }
+    return api.get(`${USERS}`, config)
   }
 }

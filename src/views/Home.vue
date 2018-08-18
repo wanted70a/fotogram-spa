@@ -124,7 +124,6 @@ export default {
     flex-flow: column wrap;
     justify-content: space-between;
     padding-top: 3rem;
-    margin-top: 7.5rem;
     @include breakpoint(overPhone){
         flex-flow: row wrap;
     }

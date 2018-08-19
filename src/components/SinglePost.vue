@@ -242,7 +242,7 @@ export default {
   }
 
   &__comments{
-    width: 90%;
+    width: 100%;
     &__all{
         margin-bottom: 1rem;
         cursor: pointer;

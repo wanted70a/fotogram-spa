@@ -8,6 +8,18 @@
       </div>
       <p class='c-comment__content__text'>{{comment.data.body}}</p>
     </div>
+    <div class="c-comment__user-cta" v-if='comment.data.user_id == logedUserId'>
+      <span class='edit'>
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"  viewBox="0 0 528.899 528.899" style="enable-background:new 0 0 528.899 528.899;" xml:space="preserve">
+	         <path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981   c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611   C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069   L27.473,390.597L0.3,512.69z"></path>
+         </svg>
+      </span>
+      <span class='delete'>
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 459 459" style="enable-background:new 0 0 459 459;" xml:space="preserve">
+		        <path d="M76.5,408c0,28.05,22.95,51,51,51h204c28.05,0,51-22.95,51-51V102h-306V408z M408,25.5h-89.25L293.25,0h-127.5l-25.5,25.5    H51v51h357V25.5z"></path>
+          </svg>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -17,6 +29,7 @@ export default {
   data(){
        return {
            IMG:IMG,
+           logedUserId: window.localStorage.userId
        }
    },
    props: {
@@ -33,7 +46,14 @@ export default {
 
 .c-comment{
   margin-bottom: 1.7rem;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  width: 93%;
+
   &__content{
+    flex:1;
+
     &__img{
       width:28px;
       height: 28px;
@@ -50,8 +70,40 @@ export default {
       margin-left: 1.2rem;
       vertical-align: top;
       padding-top: 1rem;
-      width: 80%;
+      width: 75%;
       text-align: left;
+    }
+  }
+
+  &__user-cta{
+      padding-top: 1.5rem;
+
+    & .edit{
+      width: 2.5rem;
+      display: inline-block;
+      @include breakpoint(overPhone){
+        width: 1.5rem;
+        cursor: pointer;
+      }
+    }
+
+    & .delete{
+      width: 2.5rem;
+      display: inline-block;
+      margin-left: 2.5rem;
+      @include breakpoint(overPhone){
+        width: 1.5rem;
+        margin-left: 1.5rem;
+        cursor: pointer;
+      }
+    }
+
+    & svg{
+      fill:$color-black-light;
+      transition: all 0.3s ease;
+      &:hover{
+        fill:$color-green;
+      }
     }
   }
 }

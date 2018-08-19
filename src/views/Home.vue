@@ -2,6 +2,7 @@
   <div class="p-home l">
     <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
     <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'/>
+    <app-spinner position='fixed' v-if='spinner'/>
     <transition-group name="post-list" tag="div" class="b-feed">
       <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
     </transition-group>
@@ -12,6 +13,7 @@
 // @ is an alias to /src
 import AppHeader from '@/components/Header.vue'
 import AppSinglePost from '@/components/SinglePost.vue'
+import AppSpinner from '@/components/Spinner.vue'
 import AppPostModal from '@/components/modals/PostModal.vue'
 import AppCommentsModal from '@/components/modals/CommentsModal.vue'
 import { posts } from '@/api.js'
@@ -20,6 +22,7 @@ export default {
   name: 'home',
   data(){
     return{
+      spinner:false,
       feed:[],
       amount:16,
       page:1,
@@ -39,6 +42,7 @@ export default {
     AppSinglePost,
     AppPostModal,
     AppCommentsModal,
+    AppSpinner
   },
   computed:{
     feedIds() {
@@ -47,10 +51,12 @@ export default {
   },
 
   created(){
+    this.spinner = true;
     posts.getList(this.page++, this.amount)
     .then((res) => {
         console.log(res.data.data)
         this.feed = res.data.data;
+        this.spinner = false;
         window.addEventListener('scroll', this.scrollTrigger );
     });
   },
@@ -102,12 +108,14 @@ export default {
         var height = d.offsetHeight;
         if (offset > height - 150) {
           console.log('trigger');
+          this.spinner = true;
             //fetch new posts adn psuh them to current feed array
             window.removeEventListener('scroll', this.scrollTrigger );
             posts.getList(this.page++, this.amount)
             .then((res) => {
                 let newFeed = res.data.data;
                 this.feed = [...this.feed, ...res.data.data ];
+                this.spinner = false;
                 window.addEventListener('scroll', this.scrollTrigger );
             });
         }

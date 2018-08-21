@@ -4,7 +4,6 @@
       <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
       <div class="b-comment-modal__inner">
         <div class="b-comment-modal__list">
-
           <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i }'/>
         </div>
         <app-add-comment :postId='id' :index='index' @closeAddComment='closeAddComment($event)'/>
@@ -77,8 +76,15 @@ export default {
   z-index: 13;
   &__inner{
       margin: 0 auto;
-      width:48rem;
+      position: relative;
+      width:85%;
+      height: 72vh;
+      overflow-y: hidden;
       background: $color-white;
+      @include breakpoint(overPhone){
+        height: 48rem;
+        width:48rem;
+      }
 
       h1{
         color: white;
@@ -87,6 +93,11 @@ export default {
 
   &__list{
     padding: 2rem;
+    height: 70vh;
+    overflow-y: scroll;
+    @include breakpoint(overPhone){
+      height: 42rem;
+    }
   }
 }
 </style>

@@ -44,6 +44,9 @@ export default {
 
   &--full{
     width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 
   &--modal{

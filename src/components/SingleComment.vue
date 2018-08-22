@@ -6,7 +6,11 @@
           <img :src='IMG + ( comment.data.user_image.comment ?comment.data.user_image.comment :comment.data.user_image.placeholder )' alt="">
         </router-link>
       </div>
-      <p class='c-comment__content__text'>{{comment.data.body}}</p>
+      <!-- <p class='c-comment__content__text'>{{comment.data.body}}</p> -->
+      <input ref="commentInput" :class='{enable:edit}' class='c-comment__content__text' type="text" name="" :value="comment.data.body" :disabled='!edit'>
+      <button v-if='edit' class="c-comment__submit" type="button" name="button" @click='submitComment'>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"/></svg>
+      </button>
     </div>
     <div class="c-comment__user-cta" v-if='comment.data.user_id == logedUserId'>
       <span class='edit' @click='toggleEdit'>
@@ -32,7 +36,6 @@ export default {
            logedUserId: window.localStorage.userId,
            edit:false,
            remove:false,
-
        }
    },
    props: {
@@ -44,10 +47,16 @@ export default {
   methods:{
     toggleEdit(){
       this.edit = !this.edit;
+      this.$nextTick( () => this.$refs.commentInput.focus() );
     },
 
     toggleRemove(){
       this.remove = !this.remove;
+  },
+
+    submitComment(){
+        console.log('comment updated');
+        this.edit = !this.edit;
     }
   }
 }
@@ -64,6 +73,7 @@ export default {
 
   &__content{
     flex:1;
+    position: relative;
 
     &__img{
       width:28px;
@@ -83,6 +93,17 @@ export default {
       padding-top: 1rem;
       width: 75%;
       text-align: left;
+      outline:none;
+      border: 0;
+      transition: all 0.3s ease;
+      background: rgba(0,0,0,0);
+
+      &.enable{
+          border: 1px solid $color-gray-light;
+          padding: 1rem;
+          padding-right: 3rem;
+          background: rgba(255, 255, 255,0.2);
+      }
     }
   }
 
@@ -121,6 +142,21 @@ export default {
         transition: all 0.3s ease;
       }
     }
+  }
+
+  &__submit{
+      width: 2rem;
+      top: 1rem;
+      position: absolute;
+      right: 2.5rem;
+      & svg{
+        fill:$color-black-light;
+        transition: all 0.15s ease;
+        &:hover{
+          fill:$color-green;
+          cursor: pointer;
+        }
+      }
   }
 }
 

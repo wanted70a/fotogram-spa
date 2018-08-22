@@ -45,6 +45,10 @@ export default {
       .then( res => {
         this.comments = res.data.data;
       })
+    },
+    commentEdited(emitedData){
+      emitedData.postIndex = this.index;
+      this.$emit('commentEdited', emitedData );
     }
   },
   created(){

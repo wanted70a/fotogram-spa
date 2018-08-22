@@ -29,6 +29,7 @@
 
 <script>
 import { IMG } from '@/api.js'
+import { comments } from '@/api.js'
 export default {
   data(){
        return {
@@ -55,8 +56,12 @@ export default {
   },
 
     submitComment(){
-        console.log('comment updated');
         this.edit = !this.edit;
+        if( this.$refs.commentInput.value.length ){
+          console.log('Emited from SINGLE COMMENT');
+          this.$emit('commentEdited',{comment:this.comment.data, index:this.comment.index, commentText:this.$refs.commentInput.value});
+          comments.updateById( this.comment.data.id, {body:this.$refs.commentInput.value})
+        }
     }
   }
 }
@@ -69,10 +74,10 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  width: 93%;
+  width: 100%;
 
   &__content{
-    flex:1;
+    width:calc(100% - 5rem);
     position: relative;
 
     &__img{
@@ -91,7 +96,7 @@ export default {
       margin-left: 1.2rem;
       vertical-align: top;
       padding-top: 1rem;
-      width: 75%;
+      width:calc(100% - 5.2rem);
       text-align: left;
       outline:none;
       border: 0;
@@ -109,12 +114,15 @@ export default {
 
   &__user-cta{
       padding-top: 1.5rem;
+      width: 7rem;
 
     & .edit{
       width: 2.5rem;
       display: inline-block;
+      margin-right: 2rem;
       @include breakpoint(overPhone){
         width: 1.5rem;
+        margin-right: 1.5rem;
         cursor: pointer;
       }
     }
@@ -122,10 +130,10 @@ export default {
     & .delete{
       width: 2.5rem;
       display: inline-block;
-      margin-left: 2.5rem;
+      margin-right: 2rem;
       @include breakpoint(overPhone){
         width: 1.5rem;
-        margin-left: 1.5rem;
+        margin-right: 1.5rem;
         cursor: pointer;
       }
     }
@@ -146,9 +154,10 @@ export default {
 
   &__submit{
       width: 2rem;
-      top: 1rem;
+      top: 0.8rem;
       position: absolute;
-      right: 2.5rem;
+      right: 1.5rem;
+      background: rgba(0,0,0,0);
       & svg{
         fill:$color-black-light;
         transition: all 0.15s ease;

@@ -110,6 +110,11 @@ export const comments = {
     postNewById( params ){
       let headers = api.authHeader();
       return api.post (`${COMMENTS}`, params, { headers } )
+    },
+
+    updateById( id, params ){
+      let headers = api.authHeader();
+      return api.patch (`${COMMENTS}/${id}`, params, { headers } )
     }
 }
 

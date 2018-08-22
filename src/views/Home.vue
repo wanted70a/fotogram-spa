@@ -1,10 +1,10 @@
 <template>
   <div class="p-home l">
-    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
-    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'/>
+    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'/>
+    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'/>
     <app-spinner position='fixed' v-if='spinner'/>
     <transition-group name="post-list" tag="div" class="b-feed">
-      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
+      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)' @commentEdited='commentEdited($event)'/>
     </transition-group>
   </div>
 </template>
@@ -56,6 +56,7 @@ export default {
     .then((res) => {
         console.log(res.data.data)
         this.feed = res.data.data;
+        this.post.data = res.data.data[0];
         this.spinner = false;
         window.addEventListener('scroll', this.scrollTrigger );
     });
@@ -120,6 +121,12 @@ export default {
             });
         }
     },
+    commentEdited( emitedData ){
+      console.log('RECIEVED IN HP');
+      console.log(emitedData);
+      this.feed[ emitedData.postIndex ].comments[ emitedData.index ].body = emitedData.commentText;
+      this.post.data.comments[ emitedData.index ].body = emitedData.commentText;
+    }
   }
 }
 </script>

@@ -4,7 +4,7 @@
       <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
       <div class="b-comment-modal__inner">
         <div class="b-comment-modal__list">
-          <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i }'/>
+          <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i }'  @commentEdited='commentEdited($event)'/>
         </div>
         <app-add-comment :postId='id' :index='index' @closeAddComment='closeAddComment($event)'/>
       </div>
@@ -19,7 +19,7 @@ import AppAddComment from '@/components/AddComment.vue'
 export default {
   data(){
     return{
-        comments:[],
+        //comments:[],
         show:false,
         page:1,
         amount:50
@@ -27,10 +27,13 @@ export default {
   },
   props:{
     id:{
-        required:true
+        required:true,
       },
     index:{
-      required:true
+      required:true,
+    },
+    comments:{
+        required:true,
     }
   },
   methods:{
@@ -38,8 +41,6 @@ export default {
       this.$emit('closePostModal');
     },
     closeAddComment( emitedData ){
-      console.log(`I am in comentsModal`);
-      console.log(emitedData);
       this.$emit('newComment', emitedData)
       comments.getByPostId( this.id, this.page, this.amount)
       .then( res => {
@@ -52,11 +53,7 @@ export default {
     }
   },
   created(){
-      comments.getByPostId( this.id, this.page, this.amount)
-      .then( res => {
-        console.log(res.data.data);
-        this.comments = res.data.data;
-      })
+
   },
   components:{
     AppSingleComment,

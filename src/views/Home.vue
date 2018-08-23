@@ -1,7 +1,7 @@
 <template>
   <div class="p-home l">
     <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'/>
-    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'/>
+    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' :comments='commentsModal.comments' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'/>
     <app-spinner position='fixed' v-if='spinner'/>
     <transition-group name="post-list" tag="div" class="b-feed">
       <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)' @commentEdited='commentEdited($event)'/>
@@ -16,7 +16,7 @@ import AppSinglePost from '@/components/SinglePost.vue'
 import AppSpinner from '@/components/Spinner.vue'
 import AppPostModal from '@/components/modals/PostModal.vue'
 import AppCommentsModal from '@/components/modals/CommentsModal.vue'
-import { posts } from '@/api.js'
+import { posts, comments } from '@/api.js'
 
 export default {
   name: 'home',
@@ -28,6 +28,9 @@ export default {
       page:1,
       commentsModal:{
         show:false,
+        comments:[],
+        amount:30,
+        page:1,
       },
       post:{
         show:false,
@@ -56,7 +59,6 @@ export default {
     .then((res) => {
         console.log(res.data.data)
         this.feed = res.data.data;
-        this.post.data = res.data.data[0];
         this.spinner = false;
         window.addEventListener('scroll', this.scrollTrigger );
     });
@@ -79,8 +81,14 @@ export default {
       });
     },
     toggleCommentsModal( data ){
-      this.commentsModal.show = true;
+      this.commentsModal.show = false;
       this.post.show = false;
+      comments.getByPostId( data.id, this.commentsModal.page, this.commentsModal.amount)
+      .then( res => {
+
+        this.commentsModal.comments = res.data.data;
+        this.commentsModal.show = true;
+      })
       this.post.id = data.id;
       this.post.index = data.index;
       document.body.style.overflowY = "hidden";
@@ -126,6 +134,7 @@ export default {
       console.log(emitedData);
       this.feed[ emitedData.postIndex ].comments[ emitedData.index ].body = emitedData.commentText;
       this.post.data.comments[ emitedData.index ].body = emitedData.commentText;
+      this.commentsModal.comments[emitedData.index].body = emitedData.commentText;
     }
   }
 }

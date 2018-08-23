@@ -19,7 +19,6 @@ import AppAddComment from '@/components/AddComment.vue'
 export default {
   data(){
     return{
-        //comments:[],
         show:false,
         page:1,
         amount:50
@@ -49,6 +48,8 @@ export default {
     },
     commentEdited(emitedData){
       emitedData.postIndex = this.index;
+      console.log("IN COMMENTS MODAl;");
+      console.log(emitedData);
       this.$emit('commentEdited', emitedData );
     }
   },

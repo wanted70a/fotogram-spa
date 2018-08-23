@@ -132,6 +132,7 @@ export default {
     commentEdited( emitedData ){
       console.log('RECIEVED IN HP');
       console.log(emitedData);
+      console.log(this.commentsModal.comments[emitedData.index].body);
       this.feed[ emitedData.postIndex ].comments[ emitedData.index ].body = emitedData.commentText;
       this.post.data.comments[ emitedData.index ].body = emitedData.commentText;
       this.commentsModal.comments[emitedData.index].body = emitedData.commentText;

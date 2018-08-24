@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="c-post__comments" v-if='post.data.comments.length'>
-      <app-single-comment v-for='( comment, i) in post.data.comments.slice(0,2)' :key='i' :comment='{ data:comment, index:i }' @commentEdited='commentEdited($event)'/>
+      <app-single-comment v-for='( comment, i) in post.data.comments.slice(0,2)' :key='i' :comment='{ data:comment, index:i, postIndex:post.i }' @commentEdited='commentEdited($event)'/>
       <div class="c-post__comments__all">
           <p  @click='showCommentsModal' v-if='post.data.comments.length > 2'>view all comments</p>
       </div>
@@ -90,8 +90,8 @@ export default {
        console.log(emitedData);
      },
      commentEdited(emitedData){
-       emitedData.postIndex = this.post.i;
        console.log('EMITED FROM SINGLE POST');
+       console.log(emitedData);
        this.$emit('commentEdited', emitedData );
      }
     },

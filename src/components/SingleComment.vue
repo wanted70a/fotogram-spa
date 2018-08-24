@@ -59,7 +59,8 @@ export default {
         this.edit = !this.edit;
         if( this.$refs.commentInput.value.length ){
           console.log('Emited from SINGLE COMMENT');
-          this.$emit('commentEdited',{comment:this.comment.data, index:this.comment.index, commentText:this.$refs.commentInput.value});
+          console.log({comment:this.comment.data, index:this.comment.index, commentText:this.$refs.commentInput.value, postIndex:this.comment.postIndex});
+          this.$emit('commentEdited',{comment:this.comment.data, index:this.comment.index, commentText:this.$refs.commentInput.value, postIndex:this.comment.postIndex});
           comments.updateById( this.comment.data.id, {body:this.$refs.commentInput.value})
         }
     }

@@ -4,7 +4,7 @@
       <button class='c-btn--close-modal'type="button" @click='closePostModal'>X</button>
       <div class="b-comment-modal__inner">
         <div class="b-comment-modal__list">
-          <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i }'  @commentEdited='commentEdited($event)'/>
+          <app-single-comment v-for='( comment, i) in comments' :key='i' :comment='{ data:comment, index:i, postIndex:index}'  @commentEdited='commentEdited($event)'/>
         </div>
         <app-add-comment :postId='id' :index='index' @closeAddComment='closeAddComment($event)'/>
       </div>
@@ -47,7 +47,6 @@ export default {
       })
     },
     commentEdited(emitedData){
-      emitedData.postIndex = this.index;
       console.log("IN COMMENTS MODAl;");
       console.log(emitedData);
       this.$emit('commentEdited', emitedData );

@@ -66,7 +66,8 @@ export default {
       console.log(emitedData);
     },
     commentEdited(emitedData){
-      emitedData.postIndex = this.index;
+     console.log('EMITED in POST MODAL');
+     console.log(emitedData);
       this.$emit('commentEdited', emitedData );
     }
   },

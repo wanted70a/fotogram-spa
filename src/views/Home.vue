@@ -70,11 +70,11 @@ export default {
   methods:{
     showPostModal( data ){
       this.post.show = false;
+      this.post.id = data.id;
+      this.post.index = data.index;
       posts.getById( data.id )
       .then( res => {
         this.post.data = res.data.data;
-        this.post.id = data.id;
-        this.post.index = data.index;
         this.post.show = true;
         document.body.style.overflowY = "hidden";
         document.body.style.paddingRight = "15px";
@@ -83,16 +83,16 @@ export default {
     toggleCommentsModal( data ){
       this.commentsModal.show = false;
       this.post.show = false;
-      comments.getByPostId( data.id, this.commentsModal.page, this.commentsModal.amount)
-      .then( res => {
-
-        this.commentsModal.comments = res.data.data;
-        this.commentsModal.show = true;
-      })
       this.post.id = data.id;
       this.post.index = data.index;
-      document.body.style.overflowY = "hidden";
-      document.body.style.paddingRight = "15px";
+      comments.getByPostId( data.id, this.commentsModal.page, this.commentsModal.amount)
+      .then( res => {
+        this.commentsModal.comments = res.data.data;
+        this.commentsModal.show = true;
+        document.body.style.overflowY = "hidden";
+        document.body.style.paddingRight = "15px";
+      })
+
     },
     closePostModal(){
       this.post.show = false;
@@ -132,10 +132,14 @@ export default {
     commentEdited( emitedData ){
       console.log('RECIEVED IN HP');
       console.log(emitedData);
-      console.log(this.commentsModal.comments[emitedData.index].body);
-      this.feed[ emitedData.postIndex ].comments[ emitedData.index ].body = emitedData.commentText;
-      this.post.data.comments[ emitedData.index ].body = emitedData.commentText;
-      this.commentsModal.comments[emitedData.index].body = emitedData.commentText;
+      console.log(this.post.data.length);
+      this.$set(this.feed[emitedData.postIndex].comments[emitedData.index],'body', emitedData.commentText);
+      if( Object.keys(this.post.data).length){//check if obj is not empty
+          this.$set(this.post.data.comments[emitedData.index],'body', emitedData.commentText);
+      }
+      if(this.commentsModal.comments.length){
+          this.$set(this.commentsModal.comments[emitedData.index],'body', emitedData.commentText);
+      }
     }
   }
 }

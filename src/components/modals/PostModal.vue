@@ -11,7 +11,7 @@
       </span>
     </div>
     <div class="b-post-modal__inner">
-         <app-single-post :post='{ data:postData, i:index }' mediaSize='large' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'/>
+         <app-single-post :post='{ data:postData, i:index }' mediaSize='large' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'  @commentRemoved='removeComment($event)'/>
     </div>
   </div>
 </transition>
@@ -69,6 +69,10 @@ export default {
      console.log('EMITED in POST MODAL');
      console.log(emitedData);
       this.$emit('commentEdited', emitedData );
+    },
+    removeComment( emitedData ){
+      console.log(emitedData);
+      this.$emit('commentRemoved', emitedData);
     }
   },
 

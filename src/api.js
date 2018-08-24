@@ -115,6 +115,12 @@ export const comments = {
     updateById( id, params ){
       let headers = api.authHeader();
       return api.patch (`${COMMENTS}/${id}`, params, { headers } )
+    },
+
+    deleteById(id){
+      let config = {};
+      config.headers = api.authHeader();
+      return api.delete (`${COMMENTS}/${id}`, config )
     }
 }
 

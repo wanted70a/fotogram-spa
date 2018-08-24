@@ -1,10 +1,10 @@
 <template>
   <div class="p-home l">
-    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'/>
-    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' :comments='commentsModal.comments' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)'/>
+    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
+    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' :comments='commentsModal.comments' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     <app-spinner position='fixed' v-if='spinner'/>
     <transition-group name="post-list" tag="div" class="b-feed">
-      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)' @commentEdited='commentEdited($event)'/>
+      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)' @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     </transition-group>
   </div>
 </template>
@@ -111,6 +111,30 @@ export default {
       this.$set(this.post.data, 'comments', emitedData.comments)
 
     },
+    removeComment( emitedData ){
+      console.log(emitedData);
+      this.$emit('commentRemoved', emitedData);
+      this.$set(this.feed[emitedData.postIndex].comments[emitedData.index],'body', emitedData.commentText);
+      this.feed[emitedData.postIndex].comments.splice(emitedData.index, 1);
+      if( Object.keys(this.post.data).length){//check if obj is not empty
+        this.post.data.comments.splice(emitedData.index, 1);
+      }
+      if(this.commentsModal.comments.length){
+        this.commentsModal.comments.splice(emitedData.index, 1);
+      }
+    },
+    commentEdited( emitedData ){
+      console.log('RECIEVED IN HP');
+      console.log(emitedData);
+      console.log(this.post.data.length);
+      this.$set(this.feed[emitedData.postIndex].comments[emitedData.index],'body', emitedData.commentText);
+      if( Object.keys(this.post.data).length){//check if obj is not empty
+          this.$set(this.post.data.comments[emitedData.index],'body', emitedData.commentText);
+      }
+      if(this.commentsModal.comments.length){
+          this.$set(this.commentsModal.comments[emitedData.index],'body', emitedData.commentText);
+      }
+    },
     scrollTrigger(){
         var d = document.documentElement;
         var offset = d.scrollTop + window.innerHeight;
@@ -129,18 +153,6 @@ export default {
             });
         }
     },
-    commentEdited( emitedData ){
-      console.log('RECIEVED IN HP');
-      console.log(emitedData);
-      console.log(this.post.data.length);
-      this.$set(this.feed[emitedData.postIndex].comments[emitedData.index],'body', emitedData.commentText);
-      if( Object.keys(this.post.data).length){//check if obj is not empty
-          this.$set(this.post.data.comments[emitedData.index],'body', emitedData.commentText);
-      }
-      if(this.commentsModal.comments.length){
-          this.$set(this.commentsModal.comments[emitedData.index],'body', emitedData.commentText);
-      }
-    }
   }
 }
 </script>

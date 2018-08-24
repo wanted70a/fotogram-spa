@@ -1,11 +1,11 @@
 <template lang="html">
   <div class="p-user l">
-    <app-spinner position='fixed' v-if='spinner'/>
     <app-user-info :user='user'/>
-    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
-    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'/>
+    <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
+    <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' :comments='commentsModal.comments' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
+    <app-spinner position='fixed' v-if='spinner'/>
     <transition-group name="post-list" tag="div" class="b-feed">
-      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'/>
+      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)' @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     </transition-group>
   </div>
 </template>
@@ -17,7 +17,7 @@ import AppSinglePost from '@/components/SinglePost.vue'
 import AppPostModal from '@/components/modals/PostModal.vue'
 import AppCommentsModal from '@/components/modals/CommentsModal.vue'
 import AppSpinner from '@/components/Spinner.vue'
-import { posts, user } from '@/api.js'
+import { posts, user, comments } from '@/api.js'
 
 export default {
   name: 'home',
@@ -34,6 +34,9 @@ export default {
       page:1,
       commentsModal:{
         show:false,
+        comments:[],
+        amount:30,
+        page:1,
       },
       post:{
         show:false,
@@ -80,23 +83,29 @@ export default {
   methods:{
     showPostModal( data ){
       this.post.show = false;
+      this.post.id = data.id;
+      this.post.index = data.index;
       posts.getById( data.id )
       .then( res => {
         this.post.data = res.data.data;
-        this.post.id = data.id;
-        this.post.index = data.index;
         this.post.show = true;
         document.body.style.overflowY = "hidden";
         document.body.style.paddingRight = "15px";
       });
     },
     toggleCommentsModal( data ){
-      this.commentsModal.show = true;
+      this.commentsModal.show = false;
       this.post.show = false;
       this.post.id = data.id;
       this.post.index = data.index;
-      document.body.style.overflowY = "hidden";
-      document.body.style.paddingRight = "15px";
+      comments.getByPostId( data.id, this.commentsModal.page, this.commentsModal.amount)
+      .then( res => {
+        this.commentsModal.comments = res.data.data;
+        this.commentsModal.show = true;
+        document.body.style.overflowY = "hidden";
+        document.body.style.paddingRight = "15px";
+      })
+
     },
     closePostModal(){
       this.post.show = false;
@@ -114,6 +123,30 @@ export default {
       this.$set(this.feed[emitedData.index], 'comments', emitedData.comments)
       this.$set(this.post.data, 'comments', emitedData.comments)
 
+    },
+    removeComment( emitedData ){
+      console.log(emitedData);
+      this.$emit('commentRemoved', emitedData);
+      this.$set(this.feed[emitedData.postIndex].comments[emitedData.index],'body', emitedData.commentText);
+      this.feed[emitedData.postIndex].comments.splice(emitedData.index, 1);
+      if( Object.keys(this.post.data).length){//check if obj is not empty
+        this.post.data.comments.splice(emitedData.index, 1);
+      }
+      if(this.commentsModal.comments.length){
+        this.commentsModal.comments.splice(emitedData.index, 1);
+      }
+    },
+    commentEdited( emitedData ){
+      console.log('RECIEVED IN HP');
+      console.log(emitedData);
+      console.log(this.post.data.length);
+      this.$set(this.feed[emitedData.postIndex].comments[emitedData.index],'body', emitedData.commentText);
+      if( Object.keys(this.post.data).length){//check if obj is not empty
+          this.$set(this.post.data.comments[emitedData.index],'body', emitedData.commentText);
+      }
+      if(this.commentsModal.comments.length){
+          this.$set(this.commentsModal.comments[emitedData.index],'body', emitedData.commentText);
+      }
     },
     scrollTrigger(){
         if( this.feed.length === this.user.posts_count ) {

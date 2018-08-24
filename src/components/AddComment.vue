@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="c-add-comment" :class="{ 'c-add-comment--modal':modal, 'c-add-comment--full':!modal }">
-    <form class="c-add-comment__form">
+    <form class="c-add-comment__form"  v-on:submit.prevent="submitComment">
       <div class="c-add-comment__form__text">
         <input type="text" name="" value="" placeholder='comment' v-model='userComment'>
         <button class="c-add-comment__form__submit" type="button" name="button" @click='submitComment'>

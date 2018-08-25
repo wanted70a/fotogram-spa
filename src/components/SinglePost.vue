@@ -9,6 +9,7 @@
       </div>
     </div>
     <div class="c-post__media" @click='showPostModal'>
+      <app-remove-post-modal v-if='post.data.user_id == logedUserId' />
       <div class="c-post__media__img" v-if='post.data.type_id === 1'>
           <img v-if='mediaSize' :src='IMG + ( post.data.media[mediaSize] ?post.data.media[mediaSize]  :post.data.media.placeholder )' alt="">
           <img v-else :src='IMG + ( post.data.media.medium ?post.data.media.medium  :post.data.media.placeholder )' alt="">
@@ -50,17 +51,20 @@
 import { IMG } from '@/api.js'
 import AppSingleComment from '@/components/SingleComment.vue'
 import AppAddComment from '@/components/AddComment.vue'
+import AppRemovePostModal from '@/components/modals/RemovePostModal.vue'
 export default {
   data(){
        return {
            IMG:IMG,
            addComment:false,
+           logedUserId: window.localStorage.userId,
        }
    },
 
    components:{
      AppSingleComment,
      AppAddComment,
+     AppRemovePostModal
    },
    props:{
      post:{
@@ -147,6 +151,7 @@ export default {
     }
   }
   &__media{
+    position: relative;
     margin-bottom: 1.5rem;
     width: 100%;
     @include breakpoint(overPhone){

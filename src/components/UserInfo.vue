@@ -1,17 +1,24 @@
 <template lang="html">
-  <div class="c-userinfo">
-    <div class="c-userinfo__avatar">
-        <p class='c-userinfo__avatar__name'>{{user.name}}</p>
-        <div class="c-userinfo__avatar__img">
-          <img :src='IMG + (user.image.profile_large ? user.image.profile_large : user.image.placeholder )' alt="">
-        </div>
+  <div class="b-user">
+    <div class="c-userinfo">
+      <div class="c-userinfo__avatar">
+          <p class='c-userinfo__avatar__name'>{{user.name}}</p>
+          <div class="c-userinfo__avatar__img">
+            <img :src='IMG + (user.image.profile_large ? user.image.profile_large : user.image.placeholder )' alt="">
+          </div>
+      </div>
+      <div class="c-userinfo__stats">
+        <ul>
+          <li><span class='count'>{{user.posts_count}}</span><span class='label'> posts</span></li>
+          <li><span class='count'>{{user.followers_count}}</span><span class='label'> followers</span></li>
+          <li><span class='count'>{{user.following_count}}</span><span class='label'> following</span></li>
+        </ul>
+      </div>
     </div>
-    <div class="c-userinfo__stats">
-      <ul>
-        <li><span class='count'>{{user.posts_count}}</span><span class='label'> posts</span></li>
-        <li><span class='count'>{{user.followers_count}}</span><span class='label'> followers</span></li>
-        <li><span class='count'>{{user.following_count}}</span><span class='label'> following</span></li>
-      </ul>
+    <div class="c-user-cta">
+      <button type="button" class='c-btn'>EDIT PROFILE</button>
+      <button type="button" class='c-btn'>LOGOUT</button>
+      <button type="button" class='c-btn'>FOLLOW</button>
     </div>
   </div>
 </template>
@@ -85,6 +92,18 @@ export default {
       color: $color-black-light;
       padding-left: 1rem;
     }
+  }
+}
+
+.c-user-cta{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3rem;
+
+  & .c-btn{
+    margin: 0 1rem;
   }
 }
 

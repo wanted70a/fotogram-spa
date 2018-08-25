@@ -6,7 +6,6 @@
           <img :src='IMG + ( comment.data.user_image.comment ?comment.data.user_image.comment :comment.data.user_image.placeholder )' alt="">
         </router-link>
       </div>
-      <!-- <p class='c-comment__content__text'>{{comment.data.body}}</p> -->
       <input ref="commentInput" :class='{enable:edit, remove:remove}' class='c-comment__content__text' type="text" name="" :value="comment.data.body" :disabled='!edit'>
       <button v-if='edit' class="c-comment__submit" type="button" name="button" @click='submitComment'>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"/></svg>
@@ -88,8 +87,11 @@ export default {
   width: 100%;
 
   &__content{
-    width:calc(100% - 5rem);
+    width:calc(100% - 10rem);
     position: relative;
+    @include breakpoint(overPhone){
+      width:calc(100% - 5rem);
+    }
 
     &__img{
       width:28px;
@@ -106,13 +108,17 @@ export default {
       display: inline-block;
       margin-left: 1.2rem;
       vertical-align: top;
-      padding-top: 1rem;
-      width:calc(100% - 5.2rem);
+      padding-top: 2rem;
+      width: calc(100% - 7.2rem);
       text-align: left;
       outline:none;
       border: 0;
       transition: all 0.3s ease;
       background: rgba(0,0,0,0);
+      @include breakpoint(overPhone){
+        padding-top: 1rem;
+        width:calc(100% - 5.2rem);
+      }
 
       &.enable{
           border: 1px solid $color-gray-light;
@@ -125,7 +131,11 @@ export default {
 
   &__user-cta{
       padding-top: 1.5rem;
-      width: 7rem;
+      width: 9rem;
+      @include breakpoint(overPhone){
+          width: 7rem;
+      }
+
 
     & .edit{
       width: 2.5rem;

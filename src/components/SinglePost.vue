@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="c-post__media" @click='showPostModal'>
-      <app-remove-post-modal v-if='post.data.user_id == logedUserId' />
+      <app-remove-post-modal v-if='post.data.user_id == logedUserId' :data='{ id:this.post.data.id, index:this.post.i }' @postDeleted='removePost($event)'/>
       <div class="c-post__media__img" v-if='post.data.type_id === 1'>
           <img v-if='mediaSize' :src='IMG + ( post.data.media[mediaSize] ?post.data.media[mediaSize]  :post.data.media.placeholder )' alt="">
           <img v-else :src='IMG + ( post.data.media.medium ?post.data.media.medium  :post.data.media.placeholder )' alt="">
@@ -23,8 +23,8 @@
     </transition>
     <div class="c-post__info">
       <div class="c-post__info__cta">
-        <div class="c-post__info__like">
-          <svg class='c-post__info__like__picto' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <div class="c-post__info__like" @click='likePost($event)'>
+          <svg class='c-post__info__like__picto' :class='{active:post.data.auth_like_id}' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" >
               <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/>
           </svg>
         </div>
@@ -58,6 +58,7 @@ export default {
            IMG:IMG,
            addComment:false,
            logedUserId: window.localStorage.userId,
+           liked:this.post.data.auth_like_id === null ? false :true
        }
    },
 
@@ -101,6 +102,21 @@ export default {
      removeComment( emitedData ){
        console.log(emitedData);
        this.$emit('commentRemoved', emitedData);
+     },
+     removePost(emitedData){
+       this.$emit('postDeleted', emitedData)
+     },
+     likePost(event){
+       console.log(event.path[1].classList);
+       if(event.path[1].classList.contains('active')){
+         console.log('LAJKOVAN');
+          event.path[1].classList.remove('active')
+         this.liked = !this.liked;
+       }else{
+         console.log('NELAJKOVAN');
+         event.path[1].classList.add('active')
+         this.liked = !this.liked;
+       }
      }
     },
 }
@@ -205,14 +221,14 @@ export default {
         &:hover{
           @include breakpoint(overPhone){
             cursor: pointer;
-            fill: $color-green;
+            stroke: $color-black-light;
           }
         }
         &.active{
             fill: $color-green;
           &:hover{
             @include breakpoint(overPhone){
-              fill: rgba(0,0,0,0);
+              stroke: $color-green;
             }
           }
         }

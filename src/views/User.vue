@@ -1,11 +1,18 @@
 <template lang="html">
   <div class="p-user l">
-    <app-user-info :user='user'/>
+    <app-user-info :user='user' :followings='authFollowings'/>
     <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' :comments='commentsModal.comments' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     <app-spinner position='fixed' v-if='spinner'/>
     <transition-group name="post-list" tag="div" class="b-feed">
-      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'  v-on:showPostModal='showPostModal($event)' v-on:showCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)' @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
+      <app-single-post v-for='(post, index) in feed' :key='index' :post='{data:post, i:index}'
+        v-on:showPostModal='showPostModal($event)'
+        v-on:showCommentsModal='toggleCommentsModal($event)'
+        v-on:newComment='newCommentAdded($event)'
+        @commentEdited='commentEdited($event)'
+        @commentRemoved='removeComment($event)'
+        @postDeleted='removePost($event)'
+      />
     </transition-group>
   </div>
 </template>
@@ -25,13 +32,14 @@ export default {
     return{
       spinner:true,
       feed:[],
+      amount:16,
+      page:1,
       user:{
         image:{
           profile_large:''
         }
       },
-      amount:16,
-      page:1,
+      authFollowings:[],
       commentsModal:{
         show:false,
         comments:[],
@@ -63,18 +71,18 @@ export default {
   created(){
     user.getById( this.$route.params.id )
     .then( res => {
-      console.log('USER IS ');
       this.user = res.data.data;
-      console.log(this.user);
     })
     posts.getByUserId( this.$route.params.id, this.page++, this.amount)
     .then((res) => {
-      console.log('USER POSTS');
-        console.log(res.data.data)
         this.feed = res.data.data;
         this.spinner = false,
         window.addEventListener('scroll', this.scrollTrigger );
     });
+    user.getFollowings(1, 50)
+    .then( res=>{
+      this.authFollowings = res.data.data.map(item => item.id)
+    })
   },
 
   destroyed: function () {
@@ -118,14 +126,11 @@ export default {
       document.body.style.paddingRight = "0";
     },
     newCommentAdded( emitedData ){
-      console.log('HP new comment');
-      console.log(emitedData);
       this.$set(this.feed[emitedData.index], 'comments', emitedData.comments)
       this.$set(this.post.data, 'comments', emitedData.comments)
 
     },
     removeComment( emitedData ){
-      console.log(emitedData);
       this.$emit('commentRemoved', emitedData);
       this.$set(this.feed[emitedData.postIndex].comments[emitedData.index],'body', emitedData.commentText);
       this.feed[emitedData.postIndex].comments.splice(emitedData.index, 1);
@@ -137,9 +142,6 @@ export default {
       }
     },
     commentEdited( emitedData ){
-      console.log('RECIEVED IN HP');
-      console.log(emitedData);
-      console.log(this.post.data.length);
       this.$set(this.feed[emitedData.postIndex].comments[emitedData.index],'body', emitedData.commentText);
       if( Object.keys(this.post.data).length){//check if obj is not empty
           this.$set(this.post.data.comments[emitedData.index],'body', emitedData.commentText);
@@ -147,6 +149,10 @@ export default {
       if(this.commentsModal.comments.length){
           this.$set(this.commentsModal.comments[emitedData.index],'body', emitedData.commentText);
       }
+    },
+    removePost(emitedData){
+      this.$delete(this.feed, emitedData.index);
+      posts.deleteById(emitedData.id)
     },
     scrollTrigger(){
         if( this.feed.length === this.user.posts_count ) {

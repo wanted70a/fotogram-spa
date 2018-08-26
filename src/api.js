@@ -10,6 +10,9 @@ export const USER_AUTH      =      API_URL +    '/users/auth'
 export const USERS          =      API_URL +    '/users/find'
 export const USER           =      API_URL +    '/users'
 export const COMMENTS       =      API_URL +    '/comments'
+export const FOLLOWERS      =      API_URL +    '/followers'
+export const FOLLOWINGS     =      API_URL +    '/followings'
+export const LIKES          =      API_URL +    '/likes'
 
 const api = {
 
@@ -96,6 +99,22 @@ export const posts = {
       config.headers = api.authHeader();
       config.params  = { user_id, page, amount };
       return api.get( `${POSTS}` , config)
+  },
+  deleteById(id){
+    let config = {};
+    config.headers = api.authHeader();
+    return api.delete( `${POSTS}/${id}` , config)
+  },
+  like(likeId){
+    let headers = api.authHeader();
+    let params  = {}
+    params.likable_type = 1;
+    params.likable_id   = likeId;
+    return api.post( `${LIKES}` ,  params, { headers })
+  },
+  unlike( likeId ){
+    config.headers = api.authHeader();
+    return api.delete( `${LIKES}/${likeId}` , config)
   }
 }
 
@@ -136,5 +155,18 @@ export const user = {
     config.headers = api.authHeader();
     config.params = { id }
     return api.get(`${USERS}`, config)
+  },
+
+  getFollowers(page, amount){
+    let config = {};
+    config.headers = api.authHeader();
+    config.params = { page, amount };
+    return api.get(FOLLOWERS, config)
+  },
+  getFollowings(page, amount){
+    let config = {};
+    config.headers = api.authHeader();
+    config.params = { page, amount };
+    return api.get(FOLLOWINGS, config)
   }
 }

@@ -16,27 +16,38 @@
       </div>
     </div>
     <div class="c-user-cta">
-      <button type="button" class='c-btn'>EDIT PROFILE</button>
-      <button type="button" class='c-btn'>LOGOUT</button>
-      <button type="button" class='c-btn'>FOLLOW</button>
+      <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--editprofile'>EDIT PROFILE</button>
+      <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--logout'>LOGOUT</button>
+      <button v-if='!userIsLogedUser & !isFollowedByMe' type="button" class='c-btn'>FOLLOW</button>
+      <button v-if='!userIsLogedUser & isFollowedByMe' type="button" class='c-btn c-btn--unfollow'>UNFOLLOW</button>
+
     </div>
   </div>
 </template>
 
 <script>
-import { IMG } from '@/api.js'
+import { IMG, user } from '@/api.js'
 
 export default {
   data(){
     return {
       IMG:IMG,
-      userComment:'',
     }
   },
-  props:[ 'user' ],
-  methods:{
+  props:[ 'user', 'followings' ],
 
-  }
+  computed:{
+    userIsLogedUser(){
+      return window.localStorage.userId == this.user.id
+    },
+    isFollowedByMe(){
+      if( this.followings.indexOf( this.$route.params.id ) == -1 ){
+        return false;
+      }else{
+          return true;
+      }
+    }
+  },
 }
 </script>
 

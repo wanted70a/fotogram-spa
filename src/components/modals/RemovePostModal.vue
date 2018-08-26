@@ -6,8 +6,8 @@
     <div class='popup' v-if='popup' @click.stop=''>
       <h3>Delte this post ?</h3>
       <div class="popup__cta">
-        <button class='c-btn c-btn--yes' type="button" @click.stop='togglePopup()'> YES </button>
-        <button class='c-btn c-btn--no' type="button" @click.stop='togglePopup()'> NO </button>
+        <button class='c-btn c-btn--yes' type="button" @click.stop='removePost()'> YES </button>
+        <button class='c-btn c-btn--no' type="button" @click.stop='keepPost()'> NO </button>
       </div>
     </div>
   </div>
@@ -21,10 +21,18 @@ export default {
       popup:false
     }
   },
-
+  props:['data'],
   methods:{
     togglePopup(){
       this.popup = !this.popup;
+    },
+    removePost(){
+        this.popup = false;
+        this.$emit('postDeleted', this.data);
+        console.log('POSTE DELETED', this.data);
+    },
+    keepPost(){
+      this.popup = false;
     }
   }
 }

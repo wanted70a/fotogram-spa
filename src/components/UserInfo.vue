@@ -16,7 +16,8 @@
       </div>
     </div>
     <div class="c-user-cta">
-      <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--editprofile' @click='editUser()'>EDIT PROFILE</button>
+      <router-link :to="{ name: 'editProfile' }" tag='button' class='c-btn c-btn--editprofile'>EDIT PROFILE</router-link>
+      <button v-if='userIsLogedUser' type="button" ></button>
       <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--logout'>LOGOUT</button>
       <button v-if='!userIsLogedUser & !isFollowedByMe' type="button" class='c-btn'>FOLLOW</button>
       <button v-if='!userIsLogedUser & isFollowedByMe' type="button" class='c-btn c-btn--unfollow'>UNFOLLOW</button>

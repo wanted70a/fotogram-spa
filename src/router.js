@@ -7,6 +7,7 @@ import Register from './views/Register.vue'
 import Login from './views/Login.vue'
 import Terms from './views/Terms.vue'
 import User from './views/User.vue'
+import EditUserProfile from './views/EditUserProfile.vue'
 import NewPost from './views/NewPost.vue'
 import Notifications from './views/Notifications.vue'
 
@@ -44,6 +45,11 @@ export default new Router({
       path:'/user/:id',
       name:'user',
       component: User
+    },
+    {
+      path:'/editprofile',
+      name:'editProfile',
+      component: EditUserProfile
     },
     {
       path:'/notifications',

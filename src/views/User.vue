@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="p-user l">
-    <app-edit-user-info :user='user' v-if='editUserProfile' />
     <app-user-info :user='user' :followings='authFollowings' @editUserProfile='editUser()'/>
     <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' :comments='commentsModal.comments' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
@@ -21,7 +20,6 @@
 // @ is an alias to /src
 import AppHeader from '@/components/Header.vue'
 import AppUserInfo from '@/components/UserInfo.vue'
-import AppEditUserInfo from '@/components/EditUserInfo.vue'
 import AppSinglePost from '@/components/SinglePost.vue'
 import AppPostModal from '@/components/modals/PostModal.vue'
 import AppCommentsModal from '@/components/modals/CommentsModal.vue'
@@ -60,7 +58,6 @@ export default {
 
   components: {
     AppUserInfo,
-    AppEditUserInfo,
     AppSinglePost,
     AppPostModal,
     AppCommentsModal,

@@ -169,5 +169,9 @@ export const user = {
     config.headers = api.authHeader();
     config.params = { page, amount };
     return api.get(FOLLOWINGS, config)
+  },
+  updateInfo( params ){
+    let headers = api.authHeader();
+    return api.patch(`${USER_AUTH}/update`,  params, { headers } )
   }
 }

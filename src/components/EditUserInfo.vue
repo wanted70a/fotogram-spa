@@ -7,21 +7,15 @@
             <img :src='IMG + (user.image.profile_large ? user.image.profile_large : user.image.placeholder )' alt="">
           </div>
       </div>
-      <div class="c-userinfo__stats">
-        <ul>
-          <li><span class='count'>{{user.posts_count}}</span><span class='label'> posts</span></li>
-          <li><span class='count'>{{user.followers_count}}</span><span class='label'> followers</span></li>
-          <li><span class='count'>{{user.following_count}}</span><span class='label'> following</span></li>
-        </ul>
-      </div>
-    </div>
     <div class="c-user-cta">
-      <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--editprofile' @click='editUser()'>EDIT PROFILE</button>
+      <!-- <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--editprofile'>EDIT PROFILE</button>
       <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--logout'>LOGOUT</button>
       <button v-if='!userIsLogedUser & !isFollowedByMe' type="button" class='c-btn'>FOLLOW</button>
-      <button v-if='!userIsLogedUser & isFollowedByMe' type="button" class='c-btn c-btn--unfollow'>UNFOLLOW</button>
+      <button v-if='!userIsLogedUser & isFollowedByMe' type="button" class='c-btn c-btn--unfollow'>UNFOLLOW</button> -->
+
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -33,32 +27,24 @@ export default {
       IMG:IMG,
     }
   },
-  props:[ 'user', 'followings' ],
-
-  computed:{
-    userIsLogedUser(){
-      return window.localStorage.userId == this.user.id
-    },
-    isFollowedByMe(){
-      if( this.followings.indexOf( this.$route.params.id ) == -1 ){
-        return false;
-      }else{
-          return true;
-      }
-    }
-  },
-  methods:{
-      editUser(){
-          this.$emit('editUserProfile');
-          console.log('editUserProfile');
-      }
-  }
+  props:[ 'user'],
 }
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/master-scss.scss";
+.b-user{
+    position: fixed;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    background: $color-white;
+    @include breakpoint(overPhone){
 
+    }
+}
 .c-userinfo{
   display: flex;
   flex-flow: row nowrap;

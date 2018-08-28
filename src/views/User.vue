@@ -1,6 +1,7 @@
 <template lang="html">
   <div class="p-user l">
-    <app-user-info :user='user' :followings='authFollowings'/>
+    <app-edit-user-info :user='user' v-if='editUserProfile' />
+    <app-user-info :user='user' :followings='authFollowings' @editUserProfile='editUser()'/>
     <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' :comments='commentsModal.comments' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     <app-spinner position='fixed' v-if='spinner'/>
@@ -20,6 +21,7 @@
 // @ is an alias to /src
 import AppHeader from '@/components/Header.vue'
 import AppUserInfo from '@/components/UserInfo.vue'
+import AppEditUserInfo from '@/components/EditUserInfo.vue'
 import AppSinglePost from '@/components/SinglePost.vue'
 import AppPostModal from '@/components/modals/PostModal.vue'
 import AppCommentsModal from '@/components/modals/CommentsModal.vue'
@@ -30,6 +32,7 @@ export default {
   name: 'home',
   data(){
     return{
+      editUserProfile:false,
       spinner:true,
       feed:[],
       amount:16,
@@ -57,10 +60,11 @@ export default {
 
   components: {
     AppUserInfo,
+    AppEditUserInfo,
     AppSinglePost,
     AppPostModal,
     AppCommentsModal,
-    AppSpinner
+    AppSpinner,
   },
   computed:{
     feedIds() {
@@ -176,6 +180,10 @@ export default {
             });
         }
     },
+    editUser(){
+        console.log('EDIT USER TIRGERED');
+        this.editUserProfile = true;
+    }
   },
 
   watch: {

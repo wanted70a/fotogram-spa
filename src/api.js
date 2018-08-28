@@ -113,6 +113,7 @@ export const posts = {
     return api.post( `${LIKES}` ,  params, { headers })
   },
   unlike( likeId ){
+    let config = {};
     config.headers = api.authHeader();
     return api.delete( `${LIKES}/${likeId}` , config)
   }

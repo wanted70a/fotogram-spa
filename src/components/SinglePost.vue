@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { IMG } from '@/api.js'
+import { IMG, posts } from '@/api.js'
 import AppSingleComment from '@/components/SingleComment.vue'
 import AppAddComment from '@/components/AddComment.vue'
 import AppRemovePostModal from '@/components/modals/RemovePostModal.vue'
@@ -58,7 +58,8 @@ export default {
            IMG:IMG,
            addComment:false,
            logedUserId: window.localStorage.userId,
-           liked:this.post.data.auth_like_id === null ? false :true
+           liked:this.post.data.auth_like_id === null ? false :true,
+           likableId:this.post.data.auth_like_id || false,
        }
    },
 
@@ -79,11 +80,9 @@ export default {
    },
    methods:{
      showPostModal(){
-       console.log(`emit showPostModal from SINGLEPOST.vue ${this.post.data.id}` );
        this.$emit('showPostModal', { id:this.post.data.id, index:this.post.i } );
      },
      showCommentsModal(){
-         console.log(`emit showCommentsModal ${this.post.data.id}` );
          this.$emit('showCommentsModal', { id:this.post.data.id, index:this.post.i } );
      },
      showAddComment(){
@@ -92,30 +91,33 @@ export default {
      closeAddComment( emitedData ){
        this.addComment = false;
        this.$emit('newComment', emitedData )
-       console.log(emitedData);
      },
      commentEdited(emitedData){
-       console.log('EMITED FROM SINGLE POST');
-       console.log(emitedData);
        this.$emit('commentEdited', emitedData );
      },
      removeComment( emitedData ){
-       console.log(emitedData);
        this.$emit('commentRemoved', emitedData);
      },
      removePost(emitedData){
        this.$emit('postDeleted', emitedData)
      },
      likePost(event){
-       console.log(event.path[1].classList);
        if(event.path[1].classList.contains('active')){
-         console.log('LAJKOVAN');
+           //click on liked
+          --this.post.data.likes_count;
           event.path[1].classList.remove('active')
-         this.liked = !this.liked;
+          this.liked = !this.liked;
+          posts.unlike(this.post.data.auth_like_id ? this.post.data.auth_like_id : this.likableId );
        }else{
-         console.log('NELAJKOVAN');
+           //click on unliked
+         ++this.post.data.likes_count;
          event.path[1].classList.add('active')
          this.liked = !this.liked;
+         posts.like(this.post.data.id)
+         .then( (res)=>{
+             this.likableId = res.data.data.id;
+             this.test = res.data.data.id;
+         })
        }
      }
     },

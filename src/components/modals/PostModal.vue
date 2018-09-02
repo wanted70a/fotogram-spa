@@ -59,27 +59,17 @@ export default {
         return;
       }
       this.$emit('updatePostModal', { id:this.postsIds[postIndex], index:postIndex } );
-      console.log(`updated - return id=${ this.postsIds[postIndex] }`);
     },
     newCommentAdded( emitedData ){
       this.$emit('newComment', emitedData )
-      console.log(emitedData);
     },
     commentEdited(emitedData){
-     console.log('EMITED in POST MODAL');
-     console.log(emitedData);
       this.$emit('commentEdited', emitedData );
     },
     removeComment( emitedData ){
-      console.log(emitedData);
       this.$emit('commentRemoved', emitedData);
     }
   },
-
-  mounted(){
-      console.log(this.postData);
-  },
-
   components:{
     AppSinglePost
   }

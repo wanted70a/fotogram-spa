@@ -18,7 +18,7 @@
     <div class="c-user-cta">
       <router-link  v-if='userIsLogedUser' :to="{ name: 'editProfile' }" tag='button' class='c-btn c-btn--editprofile'>EDIT PROFILE</router-link>
       <button v-if='userIsLogedUser' type="button" ></button>
-      <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--logout'>LOGOUT</button>
+      <button v-if='userIsLogedUser' type="button" class='c-btn c-btn--logout' @click='logout()'>LOGOUT</button>
       <button v-if='!userIsLogedUser & !isFollowedByMe' type="button" class='c-btn'>FOLLOW</button>
       <button v-if='!userIsLogedUser & isFollowedByMe' type="button" class='c-btn c-btn--unfollow'>UNFOLLOW</button>
     </div>
@@ -52,6 +52,10 @@ export default {
       editUser(){
           this.$emit('editUserProfile');
           console.log('editUserProfile');
+      },
+      logout(){
+        localStorage.clear();
+        this.$router.push({name:'login'})
       }
   }
 }

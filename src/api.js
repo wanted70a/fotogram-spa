@@ -116,6 +116,10 @@ export const posts = {
     let config = {};
     config.headers = api.authHeader();
     return api.delete( `${LIKES}/${likeId}` , config)
+  },
+  postNewPost( params ){
+      let headers = api.authHeader();
+      return api.post(`${POSTS}`, params, { headers } )
   }
 }
 
@@ -173,5 +177,9 @@ export const user = {
   updateInfo( params ){
     let headers = api.authHeader();
     return api.patch(`${USER_AUTH}/update`,  params, { headers } )
+},
+  updateProfilePicture( params ){
+      let headers = api.authHeader();
+      return api.post(`${USERS}/auth/image`, params, { headers } )
   }
 }

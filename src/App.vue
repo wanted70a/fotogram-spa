@@ -1,7 +1,7 @@
 <template>
   <div id="app" class='main'>
-    <app-header v-if='routeName' :isDesk='isDesktop' />
-    <router-view />
+    <app-header v-if='routeName' :isDesk='isDesktop'/>
+    <router-view/>
     <app-footer-mobile v-if='isMobile && routeName'/>
   </div>
 </template>
@@ -34,6 +34,11 @@ export default {
         return false;
       }
     }
+  },
+  methods:{
+      updateProfilePicture(){
+          this.$emit('updateProfilePicture')
+      }
   },
   components: {
     AppHeader,

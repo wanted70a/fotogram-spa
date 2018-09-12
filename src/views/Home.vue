@@ -1,5 +1,6 @@
 <template>
   <div class="p-home l">
+    <router-view/>
     <app-post-modal v-if='post.show' :index='post.index' :postData='post.data' :postsIds='feedIds' @closePostModal='closePostModal($event)'  @updatePostModal='showPostModal($event)' @openCommentsModal='toggleCommentsModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     <app-comments-modal v-if='commentsModal.show' :id='post.id' :index='post.index' :comments='commentsModal.comments' @closePostModal='closeCommentsModal($event)' v-on:showPostModal='togglePostModal($event)' v-on:newComment='newCommentAdded($event)'  @commentEdited='commentEdited($event)' @commentRemoved='removeComment($event)'/>
     <app-spinner position='fixed' v-if='spinner'/>
@@ -69,6 +70,7 @@ export default {
         this.spinner = false;
         window.addEventListener('scroll', this.scrollTrigger );
     });
+    this.$emit('home');
   },
 
   destroyed: function () {

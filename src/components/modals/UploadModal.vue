@@ -2,36 +2,31 @@
 <div class="b-upload">
   <div class="c-upload">
     <h1>{{title}}</h1>
-    <form class="c-upload__form" ref='form' :class='{active: dragAndDropCapable}' method="post"
-    @:dragover.stop.prevent="handleDragOver()"
-    @:dragstart.stop.prevent="handleDragOver()"
-    @:dragend.stop.prevent="handleDragOver()"
-    @:dragleve.stop.prevent="handleDragOver()"
-    @:dragenter.stop.prevent="handleDragOver()"
-    @:drop.stop.prevent="handleDragOver()"
-    >
+    <form class="c-upload__form" ref='form' :class='{active: dragAndDropCapable}' method="post">
       <div class="c-upload__box" @click.stop='addFileManualy()'>
-        <input v-if='fileInput' class="box__file" type="file" name="files[]" id="files" ref="files" accept="image/*"  v-on:change="handleFilesUpload()"/>
+        <input v-if='fileInput' class="box__file" type="file" name="files[]" id="files" ref="files" accept="image/*"  v-on:change="onChange()"/>
         <button v-if='showPreview' class="box__file--remove" type="button" name="button" @click.stop='removeFile()'>
             <svg  class='remove' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"/>
             </svg>
         </button>
         <img :src="imagePreview" v-show="showPreview" @click.stop=''/>
+        <span class='c-upload__box__instruction'>Click here to chose file</span>
       </div>
       <button class="c-btn" :class='{disabled:!showPreview}' type="submit" :disabled='!showPreview' v-on:click.stop.prevent="submitFiles()">Upload</button>
     </form>
-    <img src="https://dummyimage.com/600x400/000/fff.jpg" alt="">
   </div>
 </div>
 </template>
 
 <script>
+import {user} from '@/api.js';
+
 export default {
   data(){
     return{
       title:'Upload Photo',
       dragAndDropCapable:false,
-      file:false,
+      file:null,
       showPreview:false,
       imagePreview:'',
       fileInput: true,
@@ -52,10 +47,17 @@ export default {
           this.$refs.files.click();
       },
       submitFiles(){
-          console.log('UPLOAD NEW PHOTO');
+          if( this.file){
+              const formData = new FormData();
+              formData.append('image', this.file, this.file.name )
+              user.updateProfilePicture( formData )
+              .then( (res)=>{
+                  this.removeFile();
+                  this.$emit('profilePictureChanged', this.imagePreview);
+              })
+          }
       },
-      handleFilesUpload(){
-          console.log(this.$refs.files.files[0]);
+      onChange(){
         this.file = this.$refs.files.files[0];
         let reader  = new FileReader();
 
@@ -74,9 +76,6 @@ export default {
         this.$refs.form.reset();
         this.showPreview = false;
         this.imagePreview = '';
-    },
-    handleDragOver(){
-        console.log('DRAG OVER');
     }
   }
 }
@@ -120,7 +119,7 @@ export default {
           right: 3rem;
           top: 2rem;
           width: 3rem;
-          z-index: 2;
+          z-index: 5;
           background: 0;
           transition: all 0.3s ease;
           &:hover{
@@ -136,6 +135,7 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
+        z-index: 2;
     }
   }
 
@@ -145,6 +145,12 @@ export default {
     width: 40rem;
     background-color: white;
     overflow: hidden;
+
+    &__instruction{
+        display: block;
+        position: absolute;
+        @include absolute(center)
+    }
   }
 
   .c-btn{

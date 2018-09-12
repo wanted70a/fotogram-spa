@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="b-user">
-    <app-upload-modal v-if='uploadPhoto'></app-upload-modal>
+    <app-upload-modal v-if='uploadPhoto' @profilePictureChanged='updateProfilePicture()'></app-upload-modal>
     <h1>Edit Page</h1>
     <div class="c-userinfo">
       <div class="c-userinfo__avatar">
@@ -49,14 +49,7 @@ export default {
     }
   },
   created(){
-    user.getById( window.localStorage.userId )
-    .then( res => {
-      this.user = res.data.data;
-      this.name = this.user.name;
-      this.username = this.user.username;
-      this.picked = this.user.gender_id;
-      console.log(this.user);
-    })
+      this.fetchThisPage();
   },
   methods:{
     submitForm(){
@@ -71,6 +64,20 @@ export default {
       localStorage.clear();
       this.$router.push({name:'login'})
     },
+    updateProfilePicture( emitedData ){
+         this.fetchThisPage();
+         this.uploadPhoto = false;
+         this.$emit('profilePictureChanged');
+    },
+    fetchThisPage(){
+        user.getById( window.localStorage.userId )
+        .then( res => {
+          this.user = res.data.data;
+          this.name = this.user.name;
+          this.username = this.user.username;
+          this.picked = this.user.gender_id;
+        })
+    }
   },
   components:{
     AppUploadModal,

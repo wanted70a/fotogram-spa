@@ -20,6 +20,13 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
+      children:[
+          {
+            path:'/new-post',
+            name:'newPost',
+            component: NewPost
+          },
+      ]
     },
     {
       path: '/register',
@@ -36,11 +43,7 @@ export default new Router({
       name:'terms',
       component: Terms
     },
-    {
-      path:'/new-post',
-      name:'newPost',
-      component: NewPost
-    },
+
     {
       path:'/user/:id',
       name:'user',

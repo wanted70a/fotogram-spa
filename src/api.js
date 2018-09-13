@@ -180,6 +180,6 @@ export const user = {
 },
   updateProfilePicture( params ){
       let headers = api.authHeader();
-      return api.post(`${USERS}/auth/image`, params, { headers } )
+      return api.post(`${USER}/auth/image`, params, { headers } )
   }
 }

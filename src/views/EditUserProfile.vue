@@ -65,14 +65,17 @@ export default {
       this.$router.push({name:'login'})
     },
     updateProfilePicture( emitedData ){
+        console.log('prof pic changed');
          this.fetchThisPage();
          this.uploadPhoto = false;
          this.$emit('profilePictureChanged');
+
     },
     fetchThisPage(){
         user.getById( window.localStorage.userId )
         .then( res => {
-          this.user = res.data.data;
+            console.log(res.data.data);
+          this.$set(this.$data, 'user', res.data.data)
           this.name = this.user.name;
           this.username = this.user.username;
           this.picked = this.user.gender_id;

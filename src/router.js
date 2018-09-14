@@ -13,18 +13,20 @@ import Notifications from './views/Notifications.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
   mode: 'history',
   routes: [
     {
       path: '/',
       name: 'home',
       component: Home,
+      meta: { requiresAuth: true },
       children:[
           {
             path:'/new-post',
             name:'newPost',
-            component: NewPost
+            component: NewPost,
+            meta: { requiresAuth: true }
           },
       ]
     },
@@ -47,17 +49,20 @@ export default new Router({
     {
       path:'/user/:id',
       name:'user',
-      component: User
+      component: User,
+      meta: { requiresAuth: true }
     },
     {
       path:'/editprofile',
       name:'editProfile',
-      component: EditUserProfile
+      component: EditUserProfile,
+      meta: { requiresAuth: true }
     },
     {
       path:'/notifications',
       name:'notifications',
-      component: Notifications
+      component: Notifications,
+      meta: { requiresAuth: true }
     },
     {
         path:'/test',
@@ -72,4 +77,25 @@ export default new Router({
         ]
     }
   ]
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some( (record) => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    if (!localStorage.hasOwnProperty('token')) {
+        //if user is loged in
+      next({
+        path: '/login',
+        //query: { redirect: to.fullPath }
+      })
+    } else {
+        //if user is loged in
+      next()
+    }
+  } else {
+      //route does not require aithorization
+    next() // make sure to always call next()!
+  }
 })
+
+export default router;
